@@ -1,0 +1,5 @@
+main
+boxhead_workspace.code-workspace
+dependencies
+dependencies/*
+.vscode/
