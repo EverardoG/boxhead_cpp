@@ -6,6 +6,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
+#include <chrono>
+
 #include "Player.h"
 
 /*
@@ -22,8 +24,16 @@ class Game
         sf::RenderWindow* window; // want to be able to delete this so we want to dynamically allocate it
         sf::VideoMode videomode;
         sf::Event ev;
-
+        // std::chrono::_V2::high_resolution_clock::time_point timelastpolled;
+        std::chrono::_V2::high_resolution_clock::time_point timelastwasd;
         Player player;
+        bool last_event_was_key_released = false;
+        bool lastD_released = false;
+        bool lastA_released = false;
+        bool lastS_released = false;
+        bool lastW_released = false;
+        int64_t silly_count = 0;
+
 
         // Functions
         void initVariables();

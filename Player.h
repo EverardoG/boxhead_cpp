@@ -17,6 +17,10 @@ class Player
 {
     private:
         // Variables
+        float x_pos;
+        float y_pos;
+        float x_vel;
+        float y_vel;
 
         // Functions
 
@@ -28,16 +32,13 @@ class Player
 
         // Functions
         void initVariables();
-        // void updateVel();
+        void updateVel(float new_x_vel, float new_y_vel);
         // void updatePos();
-        void update(float new_x_vel, float new_y_vel);
+        void update();
 
         // Variables
         sf::RectangleShape render;
-        float x_pos;
-        float y_pos;
-        float x_vel;
-        float y_vel;
+
 };
 
 #endif
