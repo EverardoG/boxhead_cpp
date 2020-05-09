@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <chrono>
+#include <math.h>
 
 
 // Constructors and Destructors
@@ -24,7 +25,7 @@ const bool Game::running() const
 void Game::update()
 {
     // std::cout << "HELLO!!!" << std::endl;
-    this->pollEvents();
+    this->pollInputs();
 
     // int64_t time_interval_wasd = 500;
     // std::chrono::_V2::high_resolution_clock::time_point now_time = std::chrono::high_resolution_clock::now();
@@ -59,7 +60,7 @@ void Game::render()
 
 }
 
-void Game::pollEvents()
+void Game::pollInputs()
 {
 
     // factor out the update into updating the velocity and updating the Position
@@ -76,108 +77,80 @@ void Game::pollEvents()
 
     silly_count += 1;
 
+    // check if the game is supposed to close
     while (this->window->pollEvent(this->ev)){
         switch (this->ev.type) {
             case sf::Event::Closed:
                 this->window->close();
                 break;
             case sf::Event::KeyPressed:
-                // std::cout << "key pressed" << std::endl;
-                this->last_event_was_key_released = false;
                 switch(this->ev.key.code){
                     case sf::Keyboard::Escape:
                         this->window->close();
                         break;
-                    case sf::Keyboard::D:
-                        // move right
-                        std::cout << "D pressed  " << lastD_released  << "  " << silly_count << std::endl;
-                        this->player.updateVel(1.0f, 0.0f);
-                        this->lastD_released = false;
-                        break;
-                    case sf::Keyboard::W:
-                        //move up
-                        this->player.updateVel(0.0f, -1.0f);
-                        this->lastW_released = false;
-                        break;
-                    case sf::Keyboard::S:
-                        //move down
-                        this->player.updateVel(0.0f, 1.0f);
-                        this->lastS_released = false;
-                        break;
-                    case sf::Keyboard::A:
-                        // move left
-                        this->player.updateVel(-1.0f, 0.0f);
-                        this->lastA_released = false;
-                        break;
-                    }
-            case sf::Event::KeyReleased:
-                // std::cout << "key released" << std::endl;
-                this->last_event_was_key_released = true;
-                switch(this->ev.key.code){
-                    case sf::Keyboard::D:
-                        std::cout << "D released" << lastD_released << "  " << silly_count << std::endl;
-                        if (lastD_released) {
-                            // move right
-                            this->player.updateVel(0.0f, 0.0f);
-                        }
-                        this->lastD_released = true;
-                        break;
-                    case sf::Keyboard::W:
-                        //move up
-                        if (lastW_released) {
-                            this->player.updateVel(0.0f, 0.0f);
-                        }
-                        this->lastW_released = true;
-                        break;
-                    case sf::Keyboard::S:
-                        //move down
-                        if (lastS_released) {
-                            this->player.updateVel(0.0f, 0.0f);
-                        }
-                        this->lastS_released = true;
-                        break;
-                    case sf::Keyboard::A:
-                        // move left
-                        if (lastA_released) {
-                            this->player.updateVel(0.0f, 0.0f);
-                        }
-                        this->lastA_released = true;
-                        break;
-
-                /* Check if the last event was a KeyReleased event
-                   If it was (and we know the current event is a KeyReleased event)
-                        then stop moving the player */
-
-                // std::cout << "KEY RELEASED" << std::endl;
-                // if (sf::Event::KeyReleased == sf::Keyboard::D || )
-                // if (time_since_wasd > time_interval_wasd) {
-                //     std::cout << "KEY RELEASED" << std::endl;
-                //     this->player.updateVel(0.0f, 0.0f);
-                // }
-                // std::cout << last_event_was_key_released << std::endl;
-                // if (this->last_event_was_key_released) {
-                //     // std::cout << " D o u b l e d i g i t s" << std::endl;
-                //     this->player.updateVel(0.0f, 0.0f);
-                // }
-
-                // this->last_event_was_key_released = true;
-                // // std::cout << "key_released - true" << std::endl;
-
-                // break;
-            // default:
-            //     std::chrono::_V2::high_resolution_clock::time_point now_time = std::chrono::high_resolution_clock::now();
-            //     int64_t time_since_wasd = std::chrono::duration_cast<std::chrono::milliseconds>(now_time - this->timelastwasd).count();
+                } // end of switch through key codes
+        } // end of switch through event types
+    } // end of while(pollEvent)
 
 
-            //     if (time_since_wasd > time_interval_wasd) {
-            //         this->player.updateVel(0.0f, 0.0f);
-            //     }
-            //     break;
-            }
+    // check first that only one out of the 4 wasd keys is being pressed
+    // if multiple are being pressed, check which one was pressed most recently
+    // attach a timestamp to each key?
+    // check if the player is supposed to move
+    // if w is being KeyPressed
+        // move right
+    // ditto for other keys
+
+    // int64_t time_interval_wasd = 500;
+    // std::chrono::_V2::high_resolution_clock::time_point now_time = std::chrono::high_resolution_clock::now();
+    // int64_t time_since_wasd = std::chrono::duration_cast<std::chrono::milliseconds>(now_time - this->timelastwasd).count();
+
+    // std::cout << time_since_wasd << std::endl;
+    // if (time_since_wasd > time_interval_wasd) {
+    //     this->player.updateVel(0.0f, 0.0f);
+    // }
+
+    float player_speed = 3.0f;
+
+    float player_x_vel = 0.0f;
+    float player_y_vel = 0.0f;
+
+    // get all the keyboard pollInputs
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        // this->timelast_W = std::chrono::high_resolution_clock::now();
+        // this->player.updateVel(0.0f, -player_speed);
+        player_y_vel -= player_speed;
     }
-}
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        // this->player.updateVel(-player_speed, 0.0f);
+        // this->timelast_A = std::chrono::high_resolution_clock::now();
+        player_x_vel -= player_speed;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        // this->player.updateVel(0.0f, player_speed);
+        // this->timelast_S = std::chrono::high_resolution_clock::now();
+        player_y_vel += player_speed;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        // this->timelast_D = std::chrono::high_resolution_clock::now();
+        // this->player.updateVel(player_speed, 0.0f);
+        player_x_vel += player_speed;
+    }
 
-}
+    if (player_x_vel != 0.0 && abs(player_x_vel) == abs(player_y_vel)) {
+        player_x_vel = player_x_vel/abs(player_x_vel) * player_speed/sqrt(2);
+        player_y_vel = player_y_vel/abs(player_y_vel) * player_speed/sqrt(2);
+    }
+
+    std::cout << "x vel: " << player_x_vel << std::endl;
+
+    this->player.updateVel(player_x_vel, player_y_vel);
+
+
+
+    // determine
+
+} // end of pollInputs
 
 
 // Private Functions

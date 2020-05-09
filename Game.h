@@ -28,12 +28,14 @@ class Game
         std::chrono::_V2::high_resolution_clock::time_point timelastwasd;
         Player player;
         bool last_event_was_key_released = false;
-        bool lastD_released = false;
-        bool lastA_released = false;
-        bool lastS_released = false;
-        bool lastW_released = false;
+        std::chrono::_V2::high_resolution_clock::time_point timelast_W;
+        std::chrono::_V2::high_resolution_clock::time_point timelast_A;
+        std::chrono::_V2::high_resolution_clock::time_point timelast_S;
+        std::chrono::_V2::high_resolution_clock::time_point timelast_D;
+        // bool timelast_A;
+        // bool lastS_released = false;
+        // bool lastW_released = false;
         int64_t silly_count = 0;
-
 
         // Functions
         void initVariables();
@@ -45,7 +47,7 @@ class Game
         virtual ~Game();
 
         // Functions
-        void pollEvents();
+        void pollInputs();
         void update();
         void render();
 

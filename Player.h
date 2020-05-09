@@ -21,6 +21,7 @@ class Player
         float y_pos;
         float x_vel;
         float y_vel;
+        // float max_speed = 3.0f;
 
         // Functions
 
