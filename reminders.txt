@@ -4,3 +4,5 @@ Documentation here: https://www.sfml-dev.org/tutorials/2.4/start-linux.php
 
 tasks.json is where the information for how to compile the code is kept
 Documentation for setting up IDE to compile things: https://code.visualstudio.com/docs/cpp/config-linux
+
+"pre compiled headers"
