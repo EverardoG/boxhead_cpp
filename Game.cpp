@@ -1,4 +1,6 @@
 #include "Game.h"
+#include <chrono>
+
 
 // Constructors and Destructors
 Game::Game()
@@ -26,11 +28,19 @@ void Game::update()
 
 void Game::render()
 {
-    this->window->clear(sf::Color(255,0,0,255));
+    // auto start = std::chrono::high_resolution_clock::now();
+    this->window->clear(sf::Color::White);
 
     // draw game in here
+    this->window->draw(player.render);
 
     this->window->display();
+
+    std::cout << this->player.x_pos << std::endl;
+    // auto stop = std::chrono::high_resolution_clock::now();
+    // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
+    // std::cout << "took an estimated: " << duration.count() << " microseconds!" << std::endl;
+
 }
 
 void Game::pollEvents()
@@ -41,13 +51,31 @@ void Game::pollEvents()
                 this->window->close();
                 break;
             case sf::Event::KeyPressed:
-                if(this->ev.key.code == sf::Keyboard::Escape){
-                    this->window->close();
-                break;
-                }
-        }
+                switch(this->ev.key.code){
+                    case sf::Keyboard::Escape:
+                        this->window->close();
+                        break;
+                    case sf::Keyboard::D:
+                        // move right
+                        this->player.update(10.0f, 0.0f);
+                        break;
+                    case sf::Keyboard::W:
+                        //move up
+                        this->player.update(0.0f, -10.0f);
+                        break;
+                    case sf::Keyboard::S:
+                        //move down
+                        this->player.update(0.0f, 10.0f);
+                        break;
+                    case sf::Keyboard::A:
+                        // move left
+                        this->player.update(-10.0f, 0.0f);
+                        break;
+                    }
+            }
     }
 }
+
 
 // Private Functions
 void Game::initVariables()
@@ -60,4 +88,6 @@ void Game::initWindow()
     this->videomode.width = 800;
 
     this->window = new sf::RenderWindow(this->videomode, "BoxHead", sf::Style::Titlebar | sf::Style::Close);
+    this->window->setFramerateLimit(60);
+    this->window->setVerticalSyncEnabled(false);
 }

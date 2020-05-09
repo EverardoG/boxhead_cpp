@@ -13,8 +13,9 @@ int main()
 
         // Render
         game.render();
+        // std::cout << "rendering" << std::endl;
     }
 
-    std::cout << "hello again!";
+    // std::cout << "hello again!";
     return 0;
 }

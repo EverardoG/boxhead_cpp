@@ -5,6 +5,9 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+
+#include "Player.h"
+
 /*
     Class for encapsulating game and objects inside it, along with updates and renders
  */
@@ -19,6 +22,8 @@ class Game
         sf::RenderWindow* window; // want to be able to delete this so we want to dynamically allocate it
         sf::VideoMode videomode;
         sf::Event ev;
+
+        Player player;
 
         // Functions
         void initVariables();
