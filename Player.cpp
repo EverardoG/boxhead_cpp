@@ -62,7 +62,7 @@ void Player::update()
     // if the y direction is updated, and the x not, then I know x is zero
 
     // std::cout << this->direction_x << " | " << this->direction_y << std::endl;
-    std::cout << this->angle << std::endl;
+    // std::cout << this->angle << std::endl;
 
     // and update the render
 
