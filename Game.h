@@ -9,6 +9,7 @@
 #include <chrono>
 
 #include "Player.h"
+#include "Zombie.h"
 
 /*
     Class for encapsulating game and objects inside it, along with updates and renders
@@ -27,6 +28,7 @@ class Game
         // std::chrono::_V2::high_resolution_clock::time_point timelastpolled;
         std::chrono::_V2::high_resolution_clock::time_point timelastwasd;
         Player player;
+        Zombie zombie;
         bool last_event_was_key_released = false;
         std::chrono::_V2::high_resolution_clock::time_point timelast_W;
         std::chrono::_V2::high_resolution_clock::time_point timelast_A;

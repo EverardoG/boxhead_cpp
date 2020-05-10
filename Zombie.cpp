@@ -1,28 +1,33 @@
-#include "Player.h"
+#include "Zombie.h"
 #define PI 3.14159265
 #include <math.h>
 
-Player::Player()
+Zombie::Zombie()
 {
     // instantiates the class
     this->initVariables();
 }
 
-Player::~Player()
+Zombie::~Zombie()
 {
     //shuts down class
 }
 
-void Player::initVariables()
+void Zombie::initVariables()
 {
-    // this->render.setPosition(sf::Vector2f(100.f,100.f));
+    // randomly place the zombie
+    this->x_pos = rand() % 600;
+    this->y_pos = rand() % 800;
+
+    this->render.setPosition(sf::Vector2f(this->x_pos,this->y_pos));
     this->render.setSize(sf::Vector2f(this->width, this->height));
-    this->render.setFillColor(sf::Color::Blue);
+    this->render.setFillColor(sf::Color::Green);
     this->render.setOutlineColor(sf::Color::Black);
     this->render.setOutlineThickness(3.f);
+
 }
 
-void Player::update()
+void Zombie::update()
 {
 
     float new_x_pos = this->x_pos + this->x_vel;
@@ -69,7 +74,7 @@ void Player::update()
     this->render.setPosition(sf::Vector2f(x_pos,y_pos));
 }
 
-void Player::updateVel(float new_x_vel, float new_y_vel)
+void Zombie::updateVel(float new_x_vel, float new_y_vel)
 {
     this->x_vel = new_x_vel;
     this->y_vel = new_y_vel;
