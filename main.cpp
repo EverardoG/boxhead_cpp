@@ -5,6 +5,7 @@ int main()
    // initialize game engine
    Game game; //TODO: parameterize the game engine - stuff like window size
 
+    // std::cout << game.zombie.x_pos << " | " << game.zombie.y_pos << std::endl;
     // Game Loop
     // bool time_check = true;
     while (game.running()) {

@@ -1,10 +1,10 @@
 #include "Player.h"
 
-// Player::Player()
-// {
-//     // instantiates the class
-//     this->initVariables();
-// }
+Player::Player()
+{
+    this->x_pos = 400;
+    this->y_pos = 400;
+}
 
 // Player::~Player()
 // {

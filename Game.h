@@ -19,7 +19,7 @@ class Game
         // std::chrono::_V2::high_resolution_clock::time_point timelastpolled;
         std::chrono::_V2::high_resolution_clock::time_point timelastwasd;
         Player player;
-        Zombie zombie;
+        std::vector<Zombie*> zombie_vec;
         bool last_event_was_key_released = false;
         std::chrono::_V2::high_resolution_clock::time_point timelast_W;
         std::chrono::_V2::high_resolution_clock::time_point timelast_A;

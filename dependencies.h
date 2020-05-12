@@ -5,6 +5,7 @@
 #include <iostream>
 #include <chrono>
 #include <math.h>
+#include <random>
 
 #define PI 3.14159265
 
@@ -13,5 +14,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+
+#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH  800
 
 #endif

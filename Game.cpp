@@ -23,13 +23,15 @@ void Game::update()
 {
     // std::cout << "HELLO!!!" << std::endl;
     this->pollInputs();
-    this->zombie.goTowards(this->player.x_pos, this->player.y_pos);
-    this->zombie.update();
+    for (int i = 0; i < 10; i++) {
+        this->zombie_vec[i]->goTowards(this->player.x_pos, this->player.y_pos);
+        this->zombie_vec[i]->update();
+    }
     this->player.update();
 
-    if (this->player.render.getGlobalBounds().intersects(this->zombie.render.getGlobalBounds())){
-        std::cout << "Got em!" << std::endl;
-    }
+    // if (this->player.render.getGlobalBounds().intersects(this->zombie.render.getGlobalBounds())){
+    //     std::cout << "Got em!" << std::endl;
+    // }
 }
 
 void Game::render()
@@ -39,7 +41,11 @@ void Game::render()
 
     // draw game in here
     this->window->draw(player.render);
-    this->window->draw(zombie.render);
+
+    for (int i = 0; i < 10; i++) {
+        this->window->draw(zombie_vec[i]->render);
+    }
+
     if (this->player.is_attacking) {
         sf::RectangleShape attack_render;
 
@@ -124,11 +130,16 @@ void Game::pollInputs()
 void Game::initVariables()
 {
     this->window = nullptr;
+
+    // initialize zombies
+    for (int i = 0; i < 10; i++) {
+        this->zombie_vec.push_back(new Zombie());
+    }
 }
 void Game::initWindow()
 {
-    this->videomode.height = 600;
-    this->videomode.width = 800;
+    this->videomode.height = WINDOW_HEIGHT;
+    this->videomode.width = WINDOW_WIDTH;
 
     this->window = new sf::RenderWindow(this->videomode, "BoxHead", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
