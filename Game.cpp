@@ -1,7 +1,4 @@
 #include "Game.h"
-#include <chrono>
-#include <math.h>
-
 
 // Constructors and Destructors
 Game::Game()

@@ -1,22 +1,13 @@
-// #pragma once
-
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
-#include <chrono>
-
-#include "Player.h"
-#include "Zombie.h"
-
 /*
     Class for encapsulating game and objects inside it, along with updates and renders
  */
 
 #ifndef GAME_H
 #define GAME_H
+
+#include "dependencies.h"
+#include "Player.h"
+#include "Zombie.h"
 
 class Game
 {
