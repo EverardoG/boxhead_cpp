@@ -5,27 +5,36 @@ Zombie::Zombie() : Character(sf::Color::Green)
     // instantiates the character superclass but with the color green
 
     // also places zombie in random position on screen
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(seed);
-    std::uniform_int_distribution<int> distribution(0,40);
-    float xpos = distribution(generator);
-    float ypos = distribution(generator);
-    // float xpos = rand() % 40;
-    // float ypos = rand() % 40;
+    // unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    // std::default_random_engine generator(seed);
+    // std::uniform_int_distribution<int> distribution(0,40);
 
-    if (xpos > 20.f) {
-        xpos += WINDOW_WIDTH - 20;
+    float xpos = 0.f;
+    float ypos = 0.f;
+
+    if (helper.generateRandomInt(0,1)) {
+        std::cout << "running if" << std::endl;
+        if (helper.generateRandomInt(0,1)) {
+            ypos = -20;
+        }
+        else{
+            ypos = WINDOW_HEIGHT;
+        }
+        xpos = helper.generateRandomInt(-20,WINDOW_WIDTH);
     }
     else {
-        xpos = -xpos;
+        std::cout << "running else" << std::endl;
+        if (helper.generateRandomInt(0,1)) {
+            xpos = -20;
+        }
+        else {
+            xpos = WINDOW_WIDTH;
+        }
+        ypos = helper.generateRandomInt(-20, WINDOW_HEIGHT);
     }
 
-    if (ypos > 30.f) {
-        ypos += WINDOW_HEIGHT - 20;
-    }
-    else {
-        ypos = -ypos;
-    }
+    xpos += helper.generateRandomInt(0,20);
+    ypos += helper.generateRandomInt(0,20);
 
     std::cout << xpos << " | " << ypos << std::endl;
     this->x_pos = xpos;

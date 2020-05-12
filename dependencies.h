@@ -6,6 +6,7 @@
 #include <chrono>
 #include <math.h>
 #include <random>
+#include "Helper.h"
 
 #define PI 3.14159265
 
@@ -17,5 +18,7 @@
 
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH  800
+
+extern Helper helper;
 
 #endif
