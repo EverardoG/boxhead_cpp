@@ -3,6 +3,8 @@
 Character::Character(sf::Color fill_color, sf::Color outline_color, float outline_thickness)
 {
     // instantiates the class
+
+    // creates render and colors it
     this->render.setSize(sf::Vector2f(this->width, this->height));
     this->render.setFillColor(fill_color);
     this->render.setOutlineColor(outline_color);

@@ -12,6 +12,7 @@ class Zombie: public Character
 {
     public:
         Zombie();
+        void goTowards(float x_des, float y_des);
 
 
 };

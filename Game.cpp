@@ -23,44 +23,13 @@ void Game::update()
 {
     // std::cout << "HELLO!!!" << std::endl;
     this->pollInputs();
-
-    //update the Velocities for the zombie
-    // calculate it based on where the plaer is - always go towards the player
-
-    float x_diff = this->player.x_pos - this->zombie.x_pos;
-    float y_diff = this->player.y_pos - this->zombie.y_pos;
-
-    std::cout << x_diff << " | " << y_diff << std::endl;
-
-    float x_dir = 0.0;
-    if (abs(x_diff) > 1.0) {
-        x_dir = (x_diff)/abs(x_diff);
-    }
-
-
-    float y_dir = 0.0;
-    if (abs(y_diff) > 1.0) {
-        y_dir = (y_diff)/abs(y_diff);
-    }
-
-
-    float zombie_speed_x = 2.f * x_dir;
-    float zombie_speed_y = 2.f * y_dir;
-
-    if (abs(y_diff) < zombie_speed_y) {
-        zombie_speed_y = y_diff;
-    }
-
-    if(abs(x_diff) < zombie_speed_x) {
-        zombie_speed_x = x_diff;
-    }
-
-
-    std::cout << zombie_speed_x<< " | " << zombie_speed_y << std::endl;
-
-    this->zombie.updateVel(zombie_speed_x, zombie_speed_y);
+    this->zombie.goTowards(this->player.x_pos, this->player.y_pos);
     this->zombie.update();
     this->player.update();
+
+    if (this->player.render.getGlobalBounds().intersects(this->zombie.render.getGlobalBounds())){
+        std::cout << "Got em!" << std::endl;
+    }
 }
 
 void Game::render()

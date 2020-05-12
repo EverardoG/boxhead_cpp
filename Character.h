@@ -34,7 +34,7 @@ class Character
         // virtual void set_color();
 
         // Variables
-        sf::RectangleShape render;
+        sf::RectangleShape render; // this is called shape in the tutorials
         bool is_attacking;
         float x_pos;
         float y_pos;
