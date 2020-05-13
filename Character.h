@@ -39,13 +39,14 @@ class Character
         float x_pos;
         float y_pos;
 
-        int direction_x;  // left is -1, right is 1
-        int direction_y; // down is 1, up is -1
+        int direction_x = 1;  // left is -1, right is 1
+        int direction_y = 1; // down is 1, up is -1
 
-        float width = 25.f;
-        float height = 50.f;
+        float width = 10.f;
+        float height = 15.f;
 
         float angle;
+        float speed;
 
 };
 

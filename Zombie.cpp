@@ -9,13 +9,14 @@ Zombie::Zombie(int zid) : Character(sf::Color::Green)
     // std::default_random_engine generator(seed);
     // std::uniform_int_distribution<int> distribution(0,40);
 
+    this->speed = ZOMBIE_SPEED;
+
     this->id = zid;
 
     float xpos = 0.f;
     float ypos = 0.f;
 
     if (helper.generateRandomInt(0,1)) {
-        // std::cout << "running if" << std::endl;
         if (helper.generateRandomInt(0,1)) {
             ypos = -20;
         }
@@ -25,7 +26,6 @@ Zombie::Zombie(int zid) : Character(sf::Color::Green)
         xpos = helper.generateRandomInt(-20,WINDOW_WIDTH);
     }
     else {
-        // std::cout << "running else" << std::endl;
         if (helper.generateRandomInt(0,1)) {
             xpos = -20;
         }
@@ -38,12 +38,10 @@ Zombie::Zombie(int zid) : Character(sf::Color::Green)
     xpos += helper.generateRandomInt(0,20);
     ypos += helper.generateRandomInt(0,20);
 
-    // std::cout << xpos << " | " << ypos << std::endl;
     this->x_pos = xpos;
     this->y_pos = ypos;
 
     this->render.setPosition(this->x_pos, this->y_pos = ypos);
-    // std::cout << this->x_pos << " | " << this->y_pos << std::endl;
 }
 
 void Zombie::goTowards(float x_des, float y_des)
@@ -51,10 +49,6 @@ void Zombie::goTowards(float x_des, float y_des)
     //update the velocities for the zombie so that it goes towards the specified destination
     float x_diff = x_des - this->x_pos;
     float y_diff = y_des - this->y_pos;
-    // std::cout << " _____________________________ " << std::endl;
-    // std::cout << this->x_pos << " | " << this->y_pos << std::endl;
-
-    // std::cout << x_diff << " | " << y_diff << std::endl;
 
     float x_dir = 0.0;
     if (abs(x_diff) > 1.0) {
@@ -68,8 +62,8 @@ void Zombie::goTowards(float x_des, float y_des)
     }
 
 
-    float zombie_speed_x = 0.5 * x_dir;
-    float zombie_speed_y = 0.5 * y_dir;
+    float zombie_speed_x = this->speed * x_dir;
+    float zombie_speed_y = this->speed * y_dir;
 
     if (abs(y_diff) < zombie_speed_y) {
         zombie_speed_y = y_diff;
@@ -78,9 +72,6 @@ void Zombie::goTowards(float x_des, float y_des)
     if(abs(x_diff) < zombie_speed_x) {
         zombie_speed_x = x_diff;
     }
-
-
-    // std::cout << zombie_speed_x<< " | " << zombie_speed_y << std::endl;
 
     this->updateVel(zombie_speed_x, zombie_speed_y);
 }

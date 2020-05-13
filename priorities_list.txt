@@ -1,0 +1,5 @@
+- zombie spawns randomly on the screen
+- multiple zombies spawn randomly on the screen
+- bullet object can be fired from player
+- bullet object collision with zombies
+- zombies are deleted when hit with bullets

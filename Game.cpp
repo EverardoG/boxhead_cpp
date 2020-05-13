@@ -30,7 +30,13 @@ void Game::update()
     this->checkCollisions();
 
     for (int i = 0; i < zombie_vec.size(); i++) {
-        this->zombie_vec[i]->goTowards(this->player.x_pos, this->player.y_pos);
+        if (zombie_vec[i]->colliding_with_zombie) {
+            this->zombie_vec[i]->updateVel(0.f, 0.f);
+            this->zombie_vec[i]->colliding_with_zombie = false;
+        }
+        else {
+            this->zombie_vec[i]->goTowards(this->player.x_pos, this->player.y_pos);
+        }
         this->zombie_vec[i]->update();
     }
 
@@ -46,13 +52,10 @@ void Game::update()
     }
 
     this->player.update();
-
-    // if (this->player.render.getGlobalBounds().intersects(this->zombie.render.getGlobalBounds())){
-    //     std::cout << "Got em!" << std::endl;
-    // }
 }
 
-void Game::checkCollisions(){
+void Game::checkCollisions()
+{
     // loop through all the zombies and see if any is hit by a bullet
     std::vector<Zombie*>::iterator zombie_iter = zombie_vec.begin();
     std::vector<Bullet*>::iterator bullet_iter;
@@ -61,11 +64,12 @@ void Game::checkCollisions(){
         sf::FloatRect zombie_shape = (*zombie_iter)->render.getGlobalBounds();
         sf::FloatRect player_shape = this->player.render.getGlobalBounds();
 
+        // check if the zombie collided with the player and reset the game if so
         if ( zombie_shape.intersects(player_shape) ) {
-            std::cout << "zombie player collision" << std::endl;
             this->initVariables();
             break;
         }
+
         // see if the zombie was hit by any bullet
         bullet_iter = bullet_vec.begin();
         while ( bullet_iter != bullet_vec.end() ) {
@@ -77,10 +81,10 @@ void Game::checkCollisions(){
             if ( (*zombie_iter)->render.getGlobalBounds().intersects( (*bullet_iter)->render.getGlobalBounds() ) ) {
                 // delete the zombie and the bullet
                 // std::cout << " deleting zombie: " << (*zombie_iter)->id << std::endl;
-                if ( (*zombie_iter)->id == 9 ) {
-                    int dummy;
-                    dummy = 10;
-                }
+                // if ( (*zombie_iter)->id == 9 ) {
+                //     int dummy;
+                //     dummy = 10;
+                // }
 
                 bullet_iter = bullet_vec.erase(bullet_iter);
                 zombie_iter = zombie_vec.erase(zombie_iter);
@@ -95,8 +99,19 @@ void Game::checkCollisions(){
                 ++bullet_iter;
             }
         } // end bullet while
-        // zombie_iter = zombie_vec.erase(zombie_iter);
-        // std::cout << "Next zombie : " << (*zombie_iter)->id << std::endl;
+
+        // check if the zombie collided with any other zombies (excluding itself)
+        std::vector<Zombie*>::iterator zombie_iter2 = zombie_vec.begin();
+        while (zombie_iter2 != zombie_vec.end()) {
+            // if the zombie is colliding with a zombie that isn't itself
+            if (zombie_iter != zombie_iter2 && (*zombie_iter)->render.getGlobalBounds().intersects( (*zombie_iter2)->render.getGlobalBounds() ) ){
+                (*zombie_iter)->colliding_with_zombie = true;
+            }
+            ++zombie_iter2;
+        }
+
+
+        // move on to the next zombie
         if (zombie_iter != zombie_vec.end()) {
             ++zombie_iter;
         }
@@ -104,7 +119,6 @@ void Game::checkCollisions(){
     }// end zombie while
     // std::cout << "finished collisions" << std::endl;
 }
-
 
 void Game::render()
 {
@@ -169,30 +183,30 @@ void Game::pollInputs()
         } // end of switch through event types
     } // end of while(pollEvent)
 
-    float player_speed = 3.0f;
+    // float player_speed = 0.75f;
 
     float player_x_vel = 0.0f;
     float player_y_vel = 0.0f;
 
     // get all the keyboard pollInputs - determine charcater movement
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        player_y_vel -= player_speed;
+        player_y_vel -= this->player.speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        player_x_vel -= player_speed;
+        player_x_vel -= this->player.speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        player_y_vel += player_speed;
+        player_y_vel += this->player.speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        player_x_vel += player_speed;
+        player_x_vel += this->player.speed;
     }
 
     // normalize any diagonal movement so you can't go faster
     // by going diagonally
     if (player_x_vel != 0.0 && abs(player_x_vel) == abs(player_y_vel)) {
-        player_x_vel = player_x_vel/abs(player_x_vel) * player_speed/sqrt(2);
-        player_y_vel = player_y_vel/abs(player_y_vel) * player_speed/sqrt(2);
+        player_x_vel = player_x_vel/abs(player_x_vel) * this->player.speed/sqrt(2);
+        player_y_vel = player_y_vel/abs(player_y_vel) * this->player.speed/sqrt(2);
     }
 
     // std::cout << "x vel: " << player_x_vel << std::endl;
@@ -201,7 +215,6 @@ void Game::pollInputs()
 
 } // end of pollInputs
 
-
 // Private Functions
 void Game::initVariables()
 {
@@ -209,13 +222,14 @@ void Game::initVariables()
 
     // initialize zombies
     zombie_vec = std::vector<Zombie*>();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 50; i++) {
         this->zombie_vec.push_back(new Zombie(i));
     }
 
     // reset the player
     player = Player();
 }
+
 void Game::initWindow()
 {
     this->videomode.height = WINDOW_HEIGHT;

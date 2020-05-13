@@ -14,6 +14,7 @@ class Zombie: public Character
         Zombie(int zid);
         void goTowards(float x_des, float y_des);
         int id;
+        bool colliding_with_zombie;
 
 
 };

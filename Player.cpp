@@ -2,6 +2,8 @@
 
 Player::Player()
 {
+    this->speed = PLAYER_SPEED;
+
     this->x_pos = 400;
     this->y_pos = 400;
 
