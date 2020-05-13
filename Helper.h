@@ -17,8 +17,9 @@ class Helper
         int generateRandomInt(int low, int high);
 
     private:
-        std::unordered_map<std::vector<int>,gen_dist> rand_map;
+        std::unordered_map<std::string,gen_dist> rand_map;
 };
 
+extern Helper helper;
 
 #endif

@@ -2,9 +2,7 @@
 
 int Helper::generateRandomInt(int low, int high) {
 
-    std::vector<int> hi_lo;
-    hi_lo.push_back(low);
-    hi_lo.push_back(high);
+    std::string hi_lo = std::to_string(low) + "to" + std::to_string(high);
 
     // check if the low and high exist in the random map
     if (this->rand_map.count(hi_lo) > 0) {
@@ -18,13 +16,16 @@ int Helper::generateRandomInt(int low, int high) {
     }
 
     else {
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
         gen_dist* gd = new gen_dist();
         gd->distribution = *(new std::uniform_int_distribution<int>(low, high));
-        gd->generator = *(new std::default_random_engine);
+        gd->generator = *(new std::default_random_engine(seed));
 
-        std::pair<std::vector<int>, gen_dist> new_pair (hi_lo, *gd);
+        std::pair<std::string, gen_dist> new_pair (hi_lo, *gd);
 
         this->rand_map.insert(new_pair);
         return generateRandomInt(low, high);
     }
 }
+
+Helper helper;
