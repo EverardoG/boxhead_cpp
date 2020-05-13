@@ -57,7 +57,15 @@ void Game::checkCollisions(){
     std::vector<Zombie*>::iterator zombie_iter = zombie_vec.begin();
     std::vector<Bullet*>::iterator bullet_iter;
     while (zombie_iter != zombie_vec.end() ) { //] && *zombie_iter != NULL ) {
-        // if ( (*zombie_iter)->render.getGlobalBounds().intersects(this->player.render.getGlobalBounds()) ) {
+
+        sf::FloatRect zombie_shape = (*zombie_iter)->render.getGlobalBounds();
+        sf::FloatRect player_shape = this->player.render.getGlobalBounds();
+
+        if ( zombie_shape.intersects(player_shape) ) {
+            std::cout << "zombie player collision" << std::endl;
+            this->initVariables();
+            break;
+        }
         // see if the zombie was hit by any bullet
         bullet_iter = bullet_vec.begin();
         while ( bullet_iter != bullet_vec.end() ) {
@@ -68,7 +76,7 @@ void Game::checkCollisions(){
             // if the zombie was hit by a bullet
             if ( (*zombie_iter)->render.getGlobalBounds().intersects( (*bullet_iter)->render.getGlobalBounds() ) ) {
                 // delete the zombie and the bullet
-                std::cout << " deleting zombie: " << (*zombie_iter)->id << std::endl;
+                // std::cout << " deleting zombie: " << (*zombie_iter)->id << std::endl;
                 if ( (*zombie_iter)->id == 9 ) {
                     int dummy;
                     dummy = 10;
@@ -76,25 +84,25 @@ void Game::checkCollisions(){
 
                 bullet_iter = bullet_vec.erase(bullet_iter);
                 zombie_iter = zombie_vec.erase(zombie_iter);
-                std::cout << zombie_vec.size() << " zombies left!" << std::endl;
+                // std::cout << zombie_vec.size() << " zombies left!" << std::endl;
 
                 // break the loop so we can check the next zombie
                 break;
             }
             // else keep checking bullets
             else {
-                std::cout << "Next bullet!" << std::endl;
+                // std::cout << "Next bullet!" << std::endl;
                 ++bullet_iter;
             }
         } // end bullet while
         // zombie_iter = zombie_vec.erase(zombie_iter);
-        std::cout << "Next zombie : " << (*zombie_iter)->id << std::endl;
+        // std::cout << "Next zombie : " << (*zombie_iter)->id << std::endl;
         if (zombie_iter != zombie_vec.end()) {
             ++zombie_iter;
         }
 
     }// end zombie while
-    std::cout << "finished collisions" << std::endl;
+    // std::cout << "finished collisions" << std::endl;
 }
 
 
@@ -197,12 +205,16 @@ void Game::pollInputs()
 // Private Functions
 void Game::initVariables()
 {
-    this->window = nullptr;
+    // this->window = nullptr;
 
     // initialize zombies
+    zombie_vec = std::vector<Zombie*>();
     for (int i = 0; i < 10; i++) {
         this->zombie_vec.push_back(new Zombie(i));
     }
+
+    // reset the player
+    player = Player();
 }
 void Game::initWindow()
 {

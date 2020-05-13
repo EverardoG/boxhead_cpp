@@ -14,7 +14,7 @@ class Game
 {
     private:
         //Variables
-        sf::RenderWindow* window; // want to be able to delete this so we want to dynamically allocate it
+        sf::RenderWindow* window = nullptr; // want to be able to delete this so we want to dynamically allocate it
         sf::VideoMode videomode;
         sf::Event ev;
         // std::chrono::_V2::high_resolution_clock::time_point timelastpolled;

@@ -41,6 +41,8 @@ Zombie::Zombie(int zid) : Character(sf::Color::Green)
     // std::cout << xpos << " | " << ypos << std::endl;
     this->x_pos = xpos;
     this->y_pos = ypos;
+
+    this->render.setPosition(this->x_pos, this->y_pos = ypos);
     // std::cout << this->x_pos << " | " << this->y_pos << std::endl;
 }
 
