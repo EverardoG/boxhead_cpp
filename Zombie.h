@@ -11,8 +11,9 @@
 class Zombie: public Character
 {
     public:
-        Zombie();
+        Zombie(int zid);
         void goTowards(float x_des, float y_des);
+        int id;
 
 
 };

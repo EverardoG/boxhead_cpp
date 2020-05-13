@@ -35,7 +35,7 @@ class Character
 
         // Variables
         sf::RectangleShape render; // this is called shape in the tutorials
-        bool is_attacking;
+        bool is_attacking = false;
         float x_pos;
         float y_pos;
 

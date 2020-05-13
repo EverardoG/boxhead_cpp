@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie() : Character(sf::Color::Green)
+Zombie::Zombie(int zid) : Character(sf::Color::Green)
 {
     // instantiates the character superclass but with the color green
 
@@ -9,11 +9,13 @@ Zombie::Zombie() : Character(sf::Color::Green)
     // std::default_random_engine generator(seed);
     // std::uniform_int_distribution<int> distribution(0,40);
 
+    this->id = zid;
+
     float xpos = 0.f;
     float ypos = 0.f;
 
     if (helper.generateRandomInt(0,1)) {
-        std::cout << "running if" << std::endl;
+        // std::cout << "running if" << std::endl;
         if (helper.generateRandomInt(0,1)) {
             ypos = -20;
         }
@@ -23,7 +25,7 @@ Zombie::Zombie() : Character(sf::Color::Green)
         xpos = helper.generateRandomInt(-20,WINDOW_WIDTH);
     }
     else {
-        std::cout << "running else" << std::endl;
+        // std::cout << "running else" << std::endl;
         if (helper.generateRandomInt(0,1)) {
             xpos = -20;
         }
@@ -36,10 +38,10 @@ Zombie::Zombie() : Character(sf::Color::Green)
     xpos += helper.generateRandomInt(0,20);
     ypos += helper.generateRandomInt(0,20);
 
-    std::cout << xpos << " | " << ypos << std::endl;
+    // std::cout << xpos << " | " << ypos << std::endl;
     this->x_pos = xpos;
     this->y_pos = ypos;
-    std::cout << this->x_pos << " | " << this->y_pos << std::endl;
+    // std::cout << this->x_pos << " | " << this->y_pos << std::endl;
 }
 
 void Zombie::goTowards(float x_des, float y_des)
