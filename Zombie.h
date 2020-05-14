@@ -11,12 +11,9 @@
 class Zombie: public Character
 {
     public:
-        Zombie(int zid);
+        Zombie(int zid, sf::Vector2f spawn_pos);
         void goTowards(float x_des, float y_des);
         int id;
-        bool colliding_with_zombie;
-
-
 };
 
 #endif

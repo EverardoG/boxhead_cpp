@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie(int zid) : Character(sf::Color::Green)
+Zombie::Zombie(int zid, sf::Vector2f spawn_pos) : Character(spawn_pos, sf::Color::Green)
 {
     // instantiates the character superclass but with the color green
 
@@ -9,7 +9,7 @@ Zombie::Zombie(int zid) : Character(sf::Color::Green)
     // std::default_random_engine generator(seed);
     // std::uniform_int_distribution<int> distribution(0,40);
 
-    this->speed = ZOMBIE_SPEED;
+    this->max_speed = ZOMBIE_SPEED;
 
     this->id = zid;
 
@@ -38,17 +38,17 @@ Zombie::Zombie(int zid) : Character(sf::Color::Green)
     xpos += helper.generateRandomInt(0,20);
     ypos += helper.generateRandomInt(0,20);
 
-    this->x_pos = xpos;
-    this->y_pos = ypos;
+    this->pos.x = xpos;
+    this->pos.y = ypos;
 
-    this->render.setPosition(this->x_pos, this->y_pos = ypos);
+    this->render.setPosition(this->pos.x, this->pos.y = ypos);
 }
 
 void Zombie::goTowards(float x_des, float y_des)
 {
     //update the velocities for the zombie so that it goes towards the specified destination
-    float x_diff = x_des - this->x_pos;
-    float y_diff = y_des - this->y_pos;
+    float x_diff = x_des - this->pos.x;
+    float y_diff = y_des - this->pos.y;
 
     float x_dir = 0.0;
     if (abs(x_diff) > 1.0) {

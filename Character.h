@@ -11,43 +11,32 @@
 class Character
 {
     protected:
-        // Variables
-
-        // static const sf::Color outline_color;
-        // float outline_thickness;
+        const float width = 10.f;
+        const float height = 15.f;
+        sf::RectangleShape render; // this is called shape in the tutorials
+        sf::Vector2f pos; // position
+        float max_speed = 1.f;
 
     public:
         // Constructors and Destructors
-        // sf::Color fill_color = ;
-
-        Character(sf::Color fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = 3.f);
+        Character(sf::Vector2f spawn_pos, sf::Color fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = 3.f);
         virtual ~Character();
 
         // Functions
-        void initVariables();
-        void updateVel(float new_x_vel, float new_y_vel);
+        void setDesVel(sf::Vector2f new_des_vel);
+        void setActVel(sf::Vector2f new_act_vel);
         void update();
-        // void set_color();
-
-        // virtual void set_color();
+        void render();
 
         // Variables
-        sf::RectangleShape render; // this is called shape in the tutorials
+        sf::Vector2i dir = sf::Vector2i(1,1); // direction
+        sf::Vector2f des_vel = sf::Vector2f(0.f,0.f); // desired velocity
+        sf::Vector2f act_vel = sf::Vector2f(0.f,0.f); // actual velocity (taking into account collisions)
+
+        float angle = 0.f;
+
         bool is_attacking = false;
-        float x_pos;
-        float y_pos;
-
-        int direction_x = 1;  // left is -1, right is 1
-        int direction_y = 1; // down is 1, up is -1
-
-        float width = 10.f;
-        float height = 15.f;
-
-        float angle;
-        float speed;
-
-        float x_vel;
-        float y_vel;
+        bool in_collision = false;
 
 };
 

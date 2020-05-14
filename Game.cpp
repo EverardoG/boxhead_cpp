@@ -23,10 +23,10 @@ void Game::update()
 {
     this->pollInputs();
     if (this->player.is_attacking) {
-        bullet_vec.push_back(new Bullet(this->player.x_pos + this->player.width/4, this->player.y_pos + this->player.height/2, this->player.angle));
+        bullet_vec.push_back(new Bullet(this->player.pos.x + this->player.width/4, this->player.pos.y + this->player.height/2, this->player.angle));
+        // TODO: Make it so that the bullet object when shot diagonally is a diagonal line instead of a giant rectangle (in terms of collisions with zombies)
     }
 
-    std::cout << "starting collisions" << std::endl;
     this->checkCollisions();
 
     for (int i = 0; i < zombie_vec.size(); i++) {
