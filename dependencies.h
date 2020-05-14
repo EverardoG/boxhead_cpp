@@ -19,7 +19,11 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH  800
 
-#define PLAYER_SPEED 2.0f;
-#define ZOMBIE_SPEED 1.1f;
+#define PLAYER_SPEED 2.0f
+#define ZOMBIE_SPEED 1.1f
+#define NUM_ZOMBIES 0
+
+#define PLAYER_SPAWN_X 10
+#define PLAYER_SPAWN_Y 10
 
 #endif

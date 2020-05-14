@@ -1,16 +1,9 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player(sf::Vector2f spawn_pos) : Character(spawn_pos)
 {
-    this->speed = PLAYER_SPEED;
+    // set max_speed to player's max_speed
+    this->max_speed = PLAYER_SPEED;
 
-    this->x_pos = 400;
-    this->y_pos = 400;
-
-    this->render.setPosition(this->x_pos, this->y_pos);
+    // instantiation of Character class handles spawning
 }
-
-// Player::~Player()
-// {
-//     //shuts down class
-// }

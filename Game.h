@@ -19,7 +19,7 @@ class Game
         sf::Event ev;
         // std::chrono::_V2::high_resolution_clock::time_point timelastpolled;
         std::chrono::_V2::high_resolution_clock::time_point timelastwasd;
-        Player player;
+        Player* player;
         std::vector<Zombie*> zombie_vec;
         std::vector<Bullet*> bullet_vec;
         bool last_event_was_key_released = false;
@@ -36,6 +36,7 @@ class Game
         void initVariables();
         void initWindow();
         void checkCollisions();
+        void spawnZombie(int zid);
 
     public:
         // Constructors and Destructors

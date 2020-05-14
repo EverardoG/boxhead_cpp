@@ -19,24 +19,26 @@ Bullet::Bullet(float startx, float starty, float angle)
     this->end_y = this->start_y + this->final_distance * sin(angle);
 
     // set up the render
-    this->render.setFillColor(sf::Color::Black);
-    this->render.setPosition(sf::Vector2f(this->curr_x, this->curr_y));
-    this->render.rotate(angle);
-    this->render.setSize(sf::Vector2f(0.f, 0.f));
+    this->m_render.setFillColor(sf::Color::Black);
+    this->m_render.setPosition(sf::Vector2f(this->curr_x, this->curr_y));
+    this->m_render.rotate(angle);
+    this->m_render.setSize(sf::Vector2f(0.f, 0.f));
 }
 
 void Bullet::update()
 {
-
     if (this->current_distance < this->final_distance) {
         this->current_distance += this->speed;
-        this->render.setSize(sf::Vector2f(this->current_distance, 1.f));
+        this->m_render.setSize(sf::Vector2f(this->current_distance, 1.f));
     }
 
     if (this->current_distance >= this->final_distance) {
         this->current_distance = this->final_distance;
         this->finished = true;
     }
+}
 
-
+sf::RectangleShape Bullet::getRender()
+{
+    return this->m_render;
 }

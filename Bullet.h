@@ -5,11 +5,16 @@
 
 class Bullet
 {
+    protected:
+        sf::RectangleShape m_render;
+
     public:
         Bullet(float startx, float starty, float angle);
         ~Bullet();
 
         void update();
+
+        sf::RectangleShape getRender();
 
         float start_x;
         float start_y;
@@ -29,8 +34,6 @@ class Bullet
 
         // int direction_x; // left is -1, nuetral 0, right is 1
         // int direction_y; // down is 1, nuetral 0, up is -1
-
-        sf::RectangleShape render;
 };
 
 #endif

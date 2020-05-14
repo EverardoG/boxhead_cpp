@@ -11,9 +11,8 @@
 class Character
 {
     protected:
-        const float width = 10.f;
-        const float height = 15.f;
-        sf::RectangleShape render; // this is called shape in the tutorials
+        const sf::Vector2f size = sf::Vector2f(10.f, 15.f);
+        sf::RectangleShape m_render; // this is called shape in the tutorials
         sf::Vector2f pos; // position
         float max_speed = 1.f;
 
@@ -22,9 +21,15 @@ class Character
         Character(sf::Vector2f spawn_pos, sf::Color fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = 3.f);
         virtual ~Character();
 
-        // Functions
+        // Accessors and Mutators
+        sf::Vector2f getPos();
+        sf::Vector2f getSize();
+        sf::RectangleShape getRender();
+        float getSpeed();
         void setDesVel(sf::Vector2f new_des_vel);
         void setActVel(sf::Vector2f new_act_vel);
+
+        // Functions
         void update();
         void render();
 
