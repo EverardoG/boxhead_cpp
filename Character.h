@@ -12,8 +12,6 @@ class Character
 {
     protected:
         // Variables
-        float x_vel;
-        float y_vel;
 
         // static const sf::Color outline_color;
         // float outline_thickness;
@@ -47,6 +45,9 @@ class Character
 
         float angle;
         float speed;
+
+        float x_vel;
+        float y_vel;
 
 };
 

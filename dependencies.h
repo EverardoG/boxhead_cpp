@@ -19,7 +19,7 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH  800
 
-#define PLAYER_SPEED 0.75f;
-#define ZOMBIE_SPEED 0.5f;
+#define PLAYER_SPEED 2.0f;
+#define ZOMBIE_SPEED 1.1f;
 
 #endif

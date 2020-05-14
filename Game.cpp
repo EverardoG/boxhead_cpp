@@ -100,15 +100,42 @@ void Game::checkCollisions()
             }
         } // end bullet while
 
-        // check if the zombie collided with any other zombies (excluding itself)
+        // create a copy of the zombie shape, but one frame in the future
+        (*zombie_iter)->goTowards(this->player.x_pos, this->player.y_pos);
+
+        sf::FloatRect zombie_shape_copy;
+        zombie_shape_copy.left = zombie_shape.left + (*zombie_iter)->x_vel;
+        zombie_shape_copy.top = zombie_shape.top + (*zombie_iter)->y_vel;
+        zombie_shape_copy.width = zombie_shape.width;
+        zombie_shape_copy.height = zombie_shape.height;
+
+        // loop through zombies (excluding itself)
+        // set colliding to true if this future zombie shape would be in collision with another zombie
+
         std::vector<Zombie*>::iterator zombie_iter2 = zombie_vec.begin();
         while (zombie_iter2 != zombie_vec.end()) {
             // if the zombie is colliding with a zombie that isn't itself
-            if (zombie_iter != zombie_iter2 && (*zombie_iter)->render.getGlobalBounds().intersects( (*zombie_iter2)->render.getGlobalBounds() ) ){
+            if (zombie_iter != zombie_iter2 && zombie_shape_copy.intersects( (*zombie_iter2)->render.getGlobalBounds() ) ){
+
+                // only set colliding to true if the 1st zombie is moving in the direction of the 2nd zombie
+
+                // check if the zombie will continue to collide on its current trajectory
+                // make a copy of the zombie's render and place it where the zombie will be next
+                // check if this new render will still collide with zombie 2
+
                 (*zombie_iter)->colliding_with_zombie = true;
+
+                // if (zombie_shape_copy.intersects( (*zombie_iter2)->render.getGlobalBounds() ) ) {
+                //     // if it does, set the zombie's collision to true so it stops moving
+                //     (*zombie_iter)->colliding_with_zombie = true;
+                // }
+                // else {
+                //     int dummy;
+                //     dummy =2;
+                // }
             }
             ++zombie_iter2;
-        }
+        } // end of checking collisions between zombies
 
 
         // move on to the next zombie
