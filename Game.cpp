@@ -180,12 +180,34 @@ void Game::update()
 
                         // check xy
                         if (zombie->des_vel.y != 0 && zombie->des_vel.x != 0) {
-                            shape_copy.top += zombie->des_vel.y;
-                            shape_copy.left += zombie->des_vel.x;
+                            // this only checks the corner, so it's a bit different from checking x or y independently from each other
+                            // make corner box
+                            shape_copy.width = abs(zombie->des_vel.x);
+                            shape_copy.height = abs(zombie->des_vel.y);
+
+                            // place corner box accordingly
+                            if (zombie->des_vel.x < 0) {
+                                shape_copy.left = zombie->getPos().x + zombie->des_vel.x;
+                            }
+                            else {
+                                shape_copy.left = zombie->getPos().x + zombie->getSize().x;
+                            }
+
+                            if (zombie->des_vel.y < 0) {
+                                shape_copy.top = zombie->getPos().y + zombie->des_vel.y;
+                            }
+                            else {
+                                shape_copy.top = zombie->getPos().y + zombie->getSize().y;
+                            }
+                            // end placemnt of corner box
+
+                            // check corner collision
                             if (shape_copy.intersects( zombie2->getRender().getGlobalBounds() )) {
                                 x_collision = true;
                                 y_collision = true;
                             }
+
+
                         }
                         // end checking x, y, xy separately
                     } // end if there's a collision detected
