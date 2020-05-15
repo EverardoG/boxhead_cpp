@@ -18,7 +18,7 @@ class Character
 
     public:
         // Constructors and Destructors
-        Character(sf::Vector2f spawn_pos, sf::Color fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = 3.f);
+        Character(sf::Vector2f spawn_pos, sf::Color fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = -3.f);
         virtual ~Character();
 
         // Accessors and Mutators

@@ -65,21 +65,169 @@ void Game::update()
         // TODO: Make it so that the bullet object when shot diagonally is a diagonal line instead of a giant rectangle (in terms of collisions with zombies)
     }
 
-    this->checkCollisions();
+    // iterate through bullets and check if any zombies were hit, delete them if so
+    std::vector<Bullet*>::iterator bullet_iter = bullet_vec.begin();
+    std::vector<Zombie*>::iterator zombie_iter;
 
-    for (int i = 0; i < zombie_vec.size(); i++) {
-        if (zombie_vec[i]->in_collision) {
-            this->zombie_vec[i]->setActVel( sf::Vector2f(0.f, 0.f) );
-            this->zombie_vec[i]->in_collision = false;
+    // go through all bullets
+    while (bullet_iter != bullet_vec.end()) {
+
+        // go through all zombies
+        zombie_iter = zombie_vec.begin();
+        while ( zombie_iter != zombie_vec.end() ) {
+
+            // if the zombie and bullet intersect, delete both and update the pointers
+            if ( (*zombie_iter)->getRender().getGlobalBounds().intersects( (*bullet_iter)->getRender().getGlobalBounds() ) ) {
+                bullet_iter = bullet_vec.erase(bullet_iter);
+                zombie_iter = zombie_vec.erase(zombie_iter);
+                break; // stop checking the zombies for this bullet
+            }
+            else {
+                ++zombie_iter;
+            }
+
         }
-        else {
-            this->zombie_vec[i]->goTowards(this->player->getPos().x, this->player->getPos().y);
-            this->zombie_vec[i]->setActVel(this->zombie_vec[i]->des_vel);
+        if (bullet_iter != bullet_vec.end()) {
+            ++bullet_iter;
         }
-        this->zombie_vec[i]->update();
     }
 
-    std::vector<Bullet*>::iterator bullet_iter = bullet_vec.begin();
+
+    // iterate through all zombies
+        // have the zombie set its desired Velocity
+        // check if the zombie will collide with anything
+        // set its actual Velocity accordingly
+
+    // go through all zombies
+    for (Zombie* zombie : zombie_vec) {
+        // try to move the zombie towards the player
+        zombie->goTowards(this->player->getPos().x, this->player->getPos().y);
+
+        // make a copy of the zombie's render to move in that direction
+        // sf::FloatRect zombie_shape = zombie->getRender().getGlobalBounds();
+        // sf::FloatRect zombie_shape_copy;
+        // zombie_shape_copy.left = zombie_shape.left + zombie->des_vel.x;
+        // zombie_shape_copy.top = zombie_shape.top + zombie->des_vel.y;
+        // zombie_shape_copy.width = zombie_shape.width;
+        // zombie_shape_copy.height = zombie_shape.height;
+
+        bool x_collision = false;;
+        bool y_collision = false;
+
+        // check if the zombie wants to move
+        if (zombie->des_vel.x != 0 || zombie->des_vel.y != 0) {
+
+            x_collision = false;
+            y_collision = false;
+
+            // collision check this copy with other zombies, negate any x/y part of movement that would cause a collision
+            for (Zombie* zombie2 : zombie_vec) {
+                // check that zombie2 is not itself
+                if (zombie != zombie2) {
+                    // check if there would be a collision in x,y, or xy with zombie2
+
+                    // make a copy of the zombie's collision shape
+                    sf::FloatRect zombie_shape = zombie->getRender().getGlobalBounds();
+                    sf::FloatRect shape_copy;
+
+                    // increase it by the desired velocity so it shows any collision in x, y, or xy
+                    shape_copy.width = zombie_shape.width + zombie->des_vel.x;
+                    shape_copy.height = zombie_shape.height + zombie->des_vel.y;
+
+                    // place that shape accordingly
+                    if ( zombie->des_vel.x >= 0 ) {
+                        shape_copy.left = zombie_shape.left;
+                    }
+                    else {
+                        shape_copy.left = zombie_shape.left + zombie->des_vel.x;
+                    }
+
+                    if ( zombie->des_vel.y >= 0 ) {
+                        shape_copy.top = zombie_shape.top;
+                    }
+                    else {
+                        shape_copy.top = zombie_shape.top + zombie->des_vel.y;
+                    }
+                    // end shape placement
+
+                    // check for a collision in all directions (x, y, xy)
+                    if (shape_copy.intersects(zombie2->getRender().getGlobalBounds()) )  {
+                        // determine if the collision is x, y, and/or xy
+
+                        // reset the shape size as we check each direction
+                        shape_copy.width = zombie_shape.width;
+                        shape_copy.height = zombie_shape.height;
+                        shape_copy.left = zombie_shape.left;
+                        shape_copy.top = zombie_shape.top;
+
+                        // check x
+                        if (zombie->des_vel.x != 0) {
+                            shape_copy.left += zombie->des_vel.x;
+                            if (shape_copy.intersects(zombie2->getRender().getGlobalBounds())) {
+                                x_collision = true;
+                            }
+                            shape_copy.left -= zombie->des_vel.x;
+                        }
+
+                        // check y
+                        if (zombie->des_vel.y != 0) {
+                            shape_copy.top += zombie->des_vel.y;
+                            if (shape_copy.intersects(zombie2->getRender().getGlobalBounds())) {
+                                y_collision = true;
+                            }
+                            shape_copy.top -= zombie->des_vel.y;
+                        }
+
+                        // check xy
+                        if (zombie->des_vel.y != 0 && zombie->des_vel.x != 0) {
+                            shape_copy.top += zombie->des_vel.y;
+                            shape_copy.left += zombie->des_vel.x;
+                            if (shape_copy.intersects( zombie2->getRender().getGlobalBounds() )) {
+                                x_collision = true;
+                                y_collision = true;
+                            }
+                        }
+                        // end checking x, y, xy separately
+                    } // end if there's a collision detected
+                } // end if zombie != zombie2
+            } //end looping through other zombies
+        } // end if zombie wants to move
+
+        // update the actual Velocity of the zombie
+        if (x_collision && !y_collision) {
+            zombie->act_vel.x = 0.0;
+            zombie->act_vel.y = zombie->des_vel.y;
+        }
+        else if (!x_collision && y_collision) {
+            zombie->act_vel.y = 0.0;
+            zombie->act_vel.x = zombie->des_vel.x;
+        }
+        else if (x_collision && y_collision) {
+            zombie->act_vel.y = 0.0;
+            zombie->act_vel.x = 0.0;
+        }
+        else {
+            zombie->setActVel(zombie->des_vel);
+        }
+        zombie->update();
+    }
+
+    // this->checkCollisions();
+
+    // for (int i = 0; i < zombie_vec.size(); i++) {
+    //     if (zombie_vec[i]->in_collision) {
+    //         this->zombie_vec[i]->setActVel( sf::Vector2f(0.f, 0.f) );
+    //         this->zombie_vec[i]->in_collision = false;
+    //     }
+    //     else {
+    //         this->zombie_vec[i]->goTowards(this->player->getPos().x, this->player->getPos().y);
+    //         this->zombie_vec[i]->setActVel(this->zombie_vec[i]->des_vel);
+    //     }
+    //     this->zombie_vec[i]->update();
+    // }
+
+    // std::vector<Bullet*>::iterator bullet_iter = bullet_vec.begin();
+    bullet_iter = bullet_vec.begin();
     while (bullet_iter != bullet_vec.end()) {
         if ( (*bullet_iter)->finished ) {
             bullet_iter = bullet_vec.erase(bullet_iter);
@@ -114,8 +262,8 @@ void Game::checkCollisions()
         bullet_iter = bullet_vec.begin();
         while ( bullet_iter != bullet_vec.end() ) {
 
-            int dummy;
-            dummy = 10;
+            // int dummy;
+            // dummy = 10;
 
             // if the zombie was hit by a bullet
             if ( (*zombie_iter)->getRender().getGlobalBounds().intersects( (*bullet_iter)->getRender().getGlobalBounds() ) ) {
