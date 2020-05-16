@@ -22,6 +22,8 @@
 #define ZOMBIE_SPEED 1.1f
 #define NUM_ZOMBIES 50
 
+#define CHARACTER_SIZE sf::Vector2f(10.f, 15.f)
+
 #define PLAYER_SPAWN_X 400
 #define PLAYER_SPAWN_Y 400
 

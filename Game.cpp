@@ -24,34 +24,55 @@ void Game::spawnZombie(int zid)
     //TODO: Make it so that this function avoids placing zombies
     // in collision / on top of eachother upon spawn
 
+
+    bool new_zombie_in_collision = true;
+    sf::Vector2f spawn_pos;
+
     // determine where to place the zombie
     // based on a psuedo random uniform distribution
-    float xpos = 0.f;
-    float ypos = 0.f;
+    while (new_zombie_in_collision) {
+        float xpos = 0.f;
+        float ypos = 0.f;
 
-    if (helper.generateRandomInt(0,1)) {
         if (helper.generateRandomInt(0,1)) {
-            ypos = -20;
-        }
-        else{
-            ypos = WINDOW_HEIGHT;
-        }
-        xpos = helper.generateRandomInt(-20,WINDOW_WIDTH);
-    }
-    else {
-        if (helper.generateRandomInt(0,1)) {
-            xpos = -20;
+            if (helper.generateRandomInt(0,1)) {
+                ypos = -20;
+            }
+            else{
+                ypos = WINDOW_HEIGHT;
+            }
+            xpos = helper.generateRandomInt(-20,WINDOW_WIDTH);
         }
         else {
-            xpos = WINDOW_WIDTH;
+            if (helper.generateRandomInt(0,1)) {
+                xpos = -20;
+            }
+            else {
+                xpos = WINDOW_WIDTH;
+            }
+            ypos = helper.generateRandomInt(-20, WINDOW_HEIGHT);
         }
-        ypos = helper.generateRandomInt(-20, WINDOW_HEIGHT);
+
+        xpos += helper.generateRandomInt(0,20);
+        ypos += helper.generateRandomInt(0,20);
+
+        spawn_pos = sf::Vector2f(xpos, ypos);
+
+        // check if spawning the zombie here would create a collision
+        sf::FloatRect new_zombie;
+        new_zombie.left = xpos;
+        new_zombie.top = ypos;
+        new_zombie.width = CHARACTER_SIZE.x;
+        new_zombie.height = CHARACTER_SIZE.y;
+
+        new_zombie_in_collision = false;
+        for (Zombie* zombie : this->zombie_vec) {
+            if (new_zombie.intersects( zombie->getRender().getGlobalBounds() ) ) {
+                new_zombie_in_collision = true;
+            }
+        }
+
     }
-
-    xpos += helper.generateRandomInt(0,20);
-    ypos += helper.generateRandomInt(0,20);
-
-    sf::Vector2f spawn_pos = sf::Vector2f(xpos, ypos);
 
     // create the new zombie and place it in the zombie vector
     zombie_vec.push_back(new Zombie(zid, spawn_pos));

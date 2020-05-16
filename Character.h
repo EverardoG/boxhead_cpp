@@ -11,7 +11,7 @@
 class Character
 {
     protected:
-        const sf::Vector2f size = sf::Vector2f(10.f, 15.f);
+        const sf::Vector2f size = CHARACTER_SIZE;
         sf::RectangleShape m_render; // this is called shape in the tutorials
         sf::Vector2f pos; // position
         float max_speed = 1.f;
