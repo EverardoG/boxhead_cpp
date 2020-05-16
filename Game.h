@@ -16,8 +16,11 @@ class Game
         //Variables
         sf::RenderWindow* window = nullptr; // want to be able to delete this so we want to dynamically allocate it
         sf::VideoMode videomode;
+        sf::Clock clock;
+        sf::Int32 loop_time = sf::milliseconds(16).asMilliseconds();
+        sf::Int32 last_update_time = sf::milliseconds(0).asMilliseconds();
+
         sf::Event ev;
-        // std::chrono::_V2::high_resolution_clock::time_point timelastpolled;
         std::chrono::_V2::high_resolution_clock::time_point timelastwasd;
         Player* player;
         std::vector<Zombie*> zombie_vec;
@@ -32,11 +35,15 @@ class Game
         // bool lastW_released = false;
         int64_t silly_count = 0;
 
+        sf::Int32 weapon_loop_time = sf::milliseconds(333).asMilliseconds();
+        sf::Int32 last_weapon_time = sf::milliseconds(0).asMilliseconds();
+
         // Functions
         void initVariables();
         void initWindow();
         void checkCollisions();
         void spawnZombie(int zid);
+        float getDistBtnChars(Character* char1, Character* char2);
 
     public:
         // Constructors and Destructors
