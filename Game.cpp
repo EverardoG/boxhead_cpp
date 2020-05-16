@@ -111,14 +111,16 @@ void Game::update()
         // zombie_shape_copy.width = zombie_shape.width;
         // zombie_shape_copy.height = zombie_shape.height;
 
-        bool x_collision = false;;
+        bool x_collision = false;
         bool y_collision = false;
+        bool xy_collision = false;
 
         // check if the zombie wants to move
         if (zombie->des_vel.x != 0 || zombie->des_vel.y != 0) {
 
             x_collision = false;
             y_collision = false;
+            xy_collision = false;
 
             // collision check this copy with other zombies, negate any x/y part of movement that would cause a collision
             for (Zombie* zombie2 : zombie_vec) {
@@ -203,11 +205,10 @@ void Game::update()
 
                             // check corner collision
                             if (shape_copy.intersects( zombie2->getRender().getGlobalBounds() )) {
-                                x_collision = true;
-                                y_collision = true;
+                                xy_collision = true;
+                                // x_collision = true;
+                                // y_collision = true;
                             }
-
-
                         }
                         // end checking x, y, xy separately
                     } // end if there's a collision detected
@@ -224,7 +225,7 @@ void Game::update()
             zombie->act_vel.y = 0.0;
             zombie->act_vel.x = zombie->des_vel.x;
         }
-        else if (x_collision && y_collision) {
+        else if ( (x_collision && y_collision) || xy_collision) {
             zombie->act_vel.y = 0.0;
             zombie->act_vel.x = 0.0;
         }
