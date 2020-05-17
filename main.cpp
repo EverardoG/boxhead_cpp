@@ -20,10 +20,10 @@ int main()
         sf::Int64 game_render_end_time_ms = clock.getElapsedTime().asMilliseconds();
 
         sf::Int64 end_time_ms = clock.getElapsedTime().asMilliseconds();
-        std::cout << "Main loop took " << end_time_ms-start_time_ms << std::endl;
-        std::cout << "Game update took " << game_end_time_ms - game_start_time_ms << std::endl;
-        std::cout << "Game render took " << game_render_end_time_ms - game_render_start_time_ms << std::endl;
-        std::cout << "__________________________" << std::endl;
+        // std::cout << "Main loop took " << end_time_ms-start_time_ms << std::endl;
+        // std::cout << "Game update took " << game_end_time_ms - game_start_time_ms << std::endl;
+        // std::cout << "Game render took " << game_render_end_time_ms - game_render_start_time_ms << std::endl;
+        // std::cout << "__________________________" << std::endl;
     }
 
     return 0;

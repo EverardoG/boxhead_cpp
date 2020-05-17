@@ -20,7 +20,7 @@ class MainStageState : public GameState
 
     public:
         // Constructors and Destructors
-        MainStageState(sf::RenderWindow* _window);
+        MainStageState(sf::RenderWindow* _window, std::unordered_map<std::string, GameState*> _adjStates);
         virtual ~MainStageState();
 
         // Functions

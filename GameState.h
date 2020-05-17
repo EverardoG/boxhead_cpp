@@ -16,7 +16,7 @@ class GameState
 
     public:
         // Constructors and Destructors
-        GameState(sf::RenderWindow* _window) { this->window = _window; clock.restart(); };
+        GameState(sf::RenderWindow* _window, std::unordered_map<std::string, GameState*> _adjStates) { this->window = _window; this->adjStates = _adjStates; clock.restart(); };
         virtual ~GameState() {};
 
         // Functions

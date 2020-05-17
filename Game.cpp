@@ -32,7 +32,7 @@ void Game::initVariables()
         this->input_map.insert(std::pair<std::string, bool>(input, false));
     }
 
-    this->game_state = new MainStageState(this->window);
+    this->game_state = new MainMenuState( this->window, std::unordered_map<std::string, GameState*>( { { "MainStage", new MainStageState(this->window, std::unordered_map<std::string, GameState*>()) } }) );
 }
 
 // Accessors
@@ -53,14 +53,18 @@ void Game::update()
         this->pollInputs();
 
         // this is where it runs the corresponding game state
-        this->game_state->update(this->input_map);
+        std::string next_state = this->game_state->update(this->input_map);
+
+        if (next_state != "") {
+            this->game_state = this->game_state->adjStates[next_state];
+        }
     }
 }
 
 void Game::render()
 {
     // auto start = std::chrono::high_resolution_clock::now();
-    this->window->clear(sf::Color(244,233,214,255));
+    // this->window->clear(sf::Color(244,233,214,255));
 
     // draw in the stuff from the corresponding game state
     this->game_state->render();
@@ -120,14 +124,11 @@ void Game::pollInputs()
     else {
         this->input_map["SPACE"] = false;
     }
-
-    // // normalize any diagonal movement so you can't go faster
-    // // by going diagonally
-    // if (player_x_vel != 0.0 && abs(player_x_vel) == abs(player_y_vel)) {
-    //     player_x_vel = player_x_vel/abs(player_x_vel) * this->player->getSpeed()/sqrt(2);
-    //     player_y_vel = player_y_vel/abs(player_y_vel) * this->player->getSpeed()/sqrt(2);
+    // if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+    //     this->input_map["LCLICK"] = true;
     // }
-
-    // this->player->setDesVel(sf::Vector2f(player_x_vel, player_y_vel));
+    // else {
+    //     this->input_map["LCLICK"] = false;
+    // }
 
 } // end of pollInputs

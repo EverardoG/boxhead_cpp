@@ -1,7 +1,7 @@
 #include "MainStageState.h"
 
 // Constructors and Destructors
-MainStageState::MainStageState(sf::RenderWindow* _window) : GameState(_window)
+MainStageState::MainStageState(sf::RenderWindow* _window, std::unordered_map<std::string, GameState*> _adjStates) : GameState(_window, _adjStates)
 {
     this->initVariables();
 }
@@ -328,7 +328,7 @@ void MainStageState::render()
         this->window->draw(bullet_vec[i]->getRender());
     }
 
-    this->window->display();
+    // this->window->display();
 }
 
 // Private Functions
