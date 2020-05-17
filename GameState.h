@@ -5,22 +5,22 @@
 #include "Player.h"
 #include "Zombie.h"
 #include "Bullet.h"
-// #include "Game.h"
 
 // need forward declaration of game so we can use it in gamestate
-class Game;
-
 class GameState
 {
     protected:
-        Game* game;
+        sf::RenderWindow* window = nullptr; // want to be able to delete this so we want to dynamically allocate it
+        std::unordered_map<std::string, bool> input_map; // key is the input, value is True if that input is being pressed/used
+        sf::Clock clock;
+
     public:
         // Constructors and Destructors
-        GameState(Game* _game) { this->game = _game; };
-        virtual ~GameState();
+        GameState(sf::RenderWindow* _window) { this->window = _window; clock.restart(); };
+        virtual ~GameState() {};
 
         // Functions
-        virtual std::string update() = 0;
+        virtual std::string update(std::unordered_map<std::string, bool> _input_map) = 0;
         virtual void render() = 0;
 
         // states you can get to from this state

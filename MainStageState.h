@@ -20,11 +20,11 @@ class MainStageState : public GameState
 
     public:
         // Constructors and Destructors
-        MainStageState(Game* game);
+        MainStageState(sf::RenderWindow* _window);
         virtual ~MainStageState();
 
         // Functions
-        std::string update();
+        std::string update(std::unordered_map<std::string, bool> _input_map);
         void render();
 
         // states you can get to from this state

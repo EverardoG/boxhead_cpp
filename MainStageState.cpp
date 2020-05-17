@@ -1,7 +1,7 @@
 #include "MainStageState.h"
 
 // Constructors and Destructors
-MainStageState::MainStageState(Game* _game) : GameState(_game)
+MainStageState::MainStageState(sf::RenderWindow* _window) : GameState(_window)
 {
     this->initVariables();
 }
@@ -73,8 +73,44 @@ float MainStageState::getDistBtnChars(Character* char1, Character* char2)
     return distance;
 }
 
-std::string MainStageState::update()
+std::string MainStageState::update(std::unordered_map<std::string, bool> _input_map)
 {
+    // sf::Int64 start_time_ms = clock.getElapsedTime().asMilliseconds();
+    this->input_map = _input_map;
+
+    // check if player is attacking
+    this->player->is_attacking = false;
+    if (this->input_map["SPACE"] == true && clock.getElapsedTime().asMilliseconds() - last_weapon_time > weapon_loop_time) {
+        this->player->is_attacking = true;
+        last_weapon_time = clock.getElapsedTime().asMilliseconds();
+    }
+
+    // determine player movement
+    float player_x_vel = 0.0f;
+    float player_y_vel = 0.0f;
+
+    if (this->input_map["W"]) {
+        player_y_vel -= this->player->getSpeed();
+    }
+    if (this->input_map["A"]) {
+        player_x_vel -= this->player->getSpeed();
+    }
+    if (this->input_map["S"]) {
+        player_y_vel += this->player->getSpeed();
+    }
+    if (this->input_map["D"]) {
+        player_x_vel += this->player->getSpeed();
+    }
+
+    // normalize any diagonal movement so you can't go faster
+    // by going diagonally
+    if (player_x_vel != 0.0 && abs(player_x_vel) == abs(player_y_vel)) {
+        player_x_vel = player_x_vel/abs(player_x_vel) * this->player->getSpeed()/sqrt(2);
+        player_y_vel = player_y_vel/abs(player_y_vel) * this->player->getSpeed()/sqrt(2);
+    }
+
+    this->player->setDesVel(sf::Vector2f(player_x_vel, player_y_vel));
+
     // organize zombie vector so that zombies closest to player
     // are checked first, moved first, etc
     std::sort( zombie_vec.begin(), zombie_vec.end(), [](Zombie* z1, Zombie* z2) {
@@ -270,25 +306,29 @@ std::string MainStageState::update()
             break;
         }
     }
+
+    // sf::Int64 end_time_ms = clock.getElapsedTime().asMilliseconds();
+    // std::cout << "loop took " << end_time_ms-start_time_ms << std::endl;
+    return "";
 }
 
 void MainStageState::render()
 {
     // auto start = std::chrono::high_resolution_clock::now();
-    game->window->clear(sf::Color(244,233,214,255));
+    this->window->clear(sf::Color(244,233,214,255));
 
     // draw game in here
-    game->window->draw(this->player->getRender());
+    this->window->draw(this->player->getRender());
 
     for (int i = 0; i < zombie_vec.size(); i++) {
-        game->window->draw(zombie_vec[i]->getRender());
+        this->window->draw(zombie_vec[i]->getRender());
     }
 
     for (int i = 0; i < bullet_vec.size(); i++) {
-        game->window->draw(bullet_vec[i]->getRender());
+        this->window->draw(bullet_vec[i]->getRender());
     }
 
-    game->window->display();
+    this->window->display();
 }
 
 // Private Functions

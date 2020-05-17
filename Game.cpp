@@ -32,7 +32,7 @@ void Game::initVariables()
         this->input_map.insert(std::pair<std::string, bool>(input, false));
     }
 
-    game_state = new MainStageState(this);
+    this->game_state = new MainStageState(this->window);
 }
 
 // Accessors
@@ -49,8 +49,11 @@ void Game::update()
         loop_count += 1;
         last_update_time = clock.getElapsedTime().asMilliseconds();
 
+        // first update the input_map
+        this->pollInputs();
+
         // this is where it runs the corresponding game state
-        game_state->update();
+        this->game_state->update(this->input_map);
     }
 }
 
