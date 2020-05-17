@@ -1,17 +1,17 @@
-#include "MainStageState.h"
+#include "LevelView.h"
 
 // Constructors and Destructors
-MainStageState::MainStageState(sf::RenderWindow* _window, std::unordered_map<std::string, GameState*> _adjStates) : GameState(_window, _adjStates)
+LevelView::LevelView(sf::RenderWindow* _window) : GameView(_window)
 {
     this->initVariables();
 }
 
-MainStageState::~MainStageState()
+LevelView::~LevelView()
 {
 }
 
 // Public Functions
-void MainStageState::spawnZombie(int zid)
+void LevelView::spawnZombie(int zid)
 {
     bool new_zombie_in_collision = true;
     sf::Vector2f spawn_pos;
@@ -66,21 +66,18 @@ void MainStageState::spawnZombie(int zid)
     zombie_vec.push_back(new Zombie(zid, spawn_pos));
 }
 
-float MainStageState::getDistBtnChars(Character* char1, Character* char2)
+float LevelView::getDistBtnChars(Character* char1, Character* char2)
 {
     sf::Vector2f diffpos = char1->getPos() - char2->getPos();
     float distance = sqrt( pow( diffpos.x, 2 ) + pow( diffpos.y, 2 ) );
     return distance;
 }
 
-std::string MainStageState::update(std::unordered_map<std::string, bool> _input_map)
+void LevelView::update()
 {
-    // sf::Int64 start_time_ms = clock.getElapsedTime().asMilliseconds();
-    this->input_map = _input_map;
-
     // check if player is attacking
     this->player->is_attacking = false;
-    if (this->input_map["SPACE"] == true && clock.getElapsedTime().asMilliseconds() - last_weapon_time > weapon_loop_time) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && clock.getElapsedTime().asMilliseconds() - last_weapon_time > weapon_loop_time) {
         this->player->is_attacking = true;
         last_weapon_time = clock.getElapsedTime().asMilliseconds();
     }
@@ -89,16 +86,16 @@ std::string MainStageState::update(std::unordered_map<std::string, bool> _input_
     float player_x_vel = 0.0f;
     float player_y_vel = 0.0f;
 
-    if (this->input_map["W"]) {
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::W) ) {
         player_y_vel -= this->player->getSpeed();
     }
-    if (this->input_map["A"]) {
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::A) ) {
         player_x_vel -= this->player->getSpeed();
     }
-    if (this->input_map["S"]) {
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) ) {
         player_y_vel += this->player->getSpeed();
     }
-    if (this->input_map["D"]) {
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::D) ) {
         player_x_vel += this->player->getSpeed();
     }
 
@@ -302,17 +299,13 @@ std::string MainStageState::update(std::unordered_map<std::string, bool> _input_
     // check if the player was touched by a zombie
     for (Zombie* zombie : this->zombie_vec) {
         if (zombie->getRender().getGlobalBounds().intersects( this->player->getRender().getGlobalBounds() )){
-            this->initVariables();
+            this->next_view = "Main Menu";
             break;
         }
     }
-
-    // sf::Int64 end_time_ms = clock.getElapsedTime().asMilliseconds();
-    // std::cout << "loop took " << end_time_ms-start_time_ms << std::endl;
-    return "";
 }
 
-void MainStageState::render()
+void LevelView::render()
 {
     // auto start = std::chrono::high_resolution_clock::now();
     this->window->clear(sf::Color(244,233,214,255));
@@ -332,7 +325,7 @@ void MainStageState::render()
 }
 
 // Private Functions
-void MainStageState::initVariables()
+void LevelView::initVariables()
 {
     // this->window = nullptr;
 

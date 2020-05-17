@@ -1,9 +1,9 @@
-#ifndef MAINSTAGESTATE_H
-#define MAINSTAGESTATE_H
+#ifndef LEVELVIEW_H
+#define LEVELVIEW_H
 
-#include "GameState.h"
+#include "GameView.h"
 
-class MainStageState : public GameState
+class LevelView : public GameView
 {
     private:
         Player* player;
@@ -20,15 +20,12 @@ class MainStageState : public GameState
 
     public:
         // Constructors and Destructors
-        MainStageState(sf::RenderWindow* _window, std::unordered_map<std::string, GameState*> _adjStates);
-        virtual ~MainStageState();
+        LevelView(sf::RenderWindow* _window);
+        virtual ~LevelView();
 
         // Functions
-        std::string update(std::unordered_map<std::string, bool> _input_map);
+        void update();
         void render();
-
-        // states you can get to from this state
-        std::unordered_map<std::string, GameState*> adjStates;
 };
 
 #endif

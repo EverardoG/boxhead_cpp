@@ -9,9 +9,9 @@
 #include "Player.h"
 #include "Zombie.h"
 #include "Bullet.h"
-#include "GameState.h"
-#include "MainStageState.h"
-#include "MainMenuState.h"
+#include "GameView.h"
+#include "MenuView.h"
+#include "LevelView.h"
 
 class Game
 {
@@ -23,9 +23,8 @@ class Game
         sf::Int32 last_update_time = sf::milliseconds(0).asMilliseconds();
         int64_t loop_count = 0;
         sf::Event ev;
-        std::vector<std::string> all_inputs = { "W", "A", "S", "D", "SPACE" };
 
-        GameState* game_state;
+        GameView* game_view;
 
         void initVariables();
         void initWindow();
@@ -44,7 +43,6 @@ class Game
         const bool running() const;
 
         sf::RenderWindow* window = nullptr; // want to be able to delete this so we want to dynamically allocate it
-        std::unordered_map<std::string, bool> input_map; // key is the input, value is True if that input is being pressed/used
 };
 
 #endif
