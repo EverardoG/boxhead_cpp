@@ -6,21 +6,25 @@ int main()
     Game game; //TODO: parameterize the game engine - stuff like window size
     sf::Clock clock;
 
+    sf::Clock clock;
     while (game.running()) {
+        sf::Int64 start_time_ms = clock.getElapsedTime().asMilliseconds();
 
         // Update
-        sf::Int64 game_update_start = clock.getElapsedTime().asMilliseconds();
+        sf::Int64 game_start_time_ms = clock.getElapsedTime().asMilliseconds();
         game.update();
-        sf::Int64 game_update_end = clock.getElapsedTime().asMilliseconds();
+        sf::Int64 game_end_time_ms = clock.getElapsedTime().asMilliseconds();
 
         // Render
-        sf::Int64 game_render_start = clock.getElapsedTime().asMilliseconds();
+        sf::Int64 game_render_start_time_ms = clock.getElapsedTime().asMilliseconds();
         game.render();
-        sf::Int64 game_render_end = clock.getElapsedTime().asMilliseconds();
+        sf::Int64 game_render_end_time_ms = clock.getElapsedTime().asMilliseconds();
 
-        std::cout << "Update took " << game_update_end - game_update_start << std::endl;
-        std::cout << "Render took " << game_render_end - game_render_start << std::endl;
-        std::cout << "_____________________" << std::endl;
+        sf::Int64 end_time_ms = clock.getElapsedTime().asMilliseconds();
+        // std::cout << "Main loop took " << end_time_ms-start_time_ms << std::endl;
+        // std::cout << "Game update took " << game_end_time_ms - game_start_time_ms << std::endl;
+        // std::cout << "Game render took " << game_render_end_time_ms - game_render_start_time_ms << std::endl;
+        // std::cout << "__________________________" << std::endl;
     }
 
     return 0;
