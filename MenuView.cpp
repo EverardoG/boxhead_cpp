@@ -18,6 +18,10 @@ void MenuView::update()
             next_view = "Main Level";
         }
     }
+    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        std::cout << "Onwards!" << std::endl;
+            next_view = "Main Level";
+    }
 }
 
 void MenuView::render()
