@@ -1,11 +1,12 @@
 #include "Character.h"
 
-Character::Character(sf::Vector2f spawn_pos, sf::Color fill_color, sf::Color outline_color, float outline_thickness)
+Character::Character(sf::Vector2f spawn_pos, sf::Color _fill_color, sf::Color outline_color, float outline_thickness)
 {
     // set up the render and spawn the character
 
     // sets color of render
-    this->m_render.setFillColor(fill_color);
+    this->fill_color = _fill_color;
+    this->m_render.setFillColor(this->fill_color);
     this->m_render.setOutlineColor(outline_color);
     this->m_render.setOutlineThickness(outline_thickness);
 
@@ -35,6 +36,14 @@ void Character::update()
 
     // and update the render
     this->m_render.setPosition(sf::Vector2f(pos.x,pos.y));
+
+    // also check if this character is taking damage and make them red if so
+    if (this->is_hit) {
+        this->m_render.setFillColor(sf::Color::Red);
+    }
+    else {
+        this->m_render.setFillColor(this->fill_color);
+    }
 }
 
 void Character::setDesVel(sf::Vector2f new_des_vel)

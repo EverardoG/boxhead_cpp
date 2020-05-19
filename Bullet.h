@@ -9,18 +9,22 @@ class Bullet
         sf::RectangleShape m_render;
 
     public:
-        Bullet(float startx, float starty, float angle);
+        Bullet(float startx, float starty, float _angle);
         ~Bullet();
 
         void update();
 
         sf::RectangleShape getRender();
 
+        float angle;
+
         float start_x;
         float start_y;
+        sf::Vector2f start_pos;
 
         float curr_x;
         float curr_y;
+        sf::Vector2f cur_pos;
 
         float end_x;
         float end_y;

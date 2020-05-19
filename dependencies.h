@@ -19,10 +19,10 @@
 #define WINDOW_WIDTH  800
 
 #define PLAYER_SPEED 3.0f
-#define ZOMBIE_SPEED 1.1f
+#define ZOMBIE_SPEED 1.0f
 #define NUM_ZOMBIES 50
 
-#define CHARACTER_SIZE sf::Vector2f(15.f, 20.f)
+#define CHARACTER_SIZE sf::Vector2f(30.f, 40.f)
 
 #define PLAYER_SPAWN_X 400
 #define PLAYER_SPAWN_Y 400

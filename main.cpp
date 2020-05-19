@@ -6,7 +6,6 @@ int main()
     Game game; //TODO: parameterize the game engine - stuff like window size
     sf::Clock clock;
 
-    sf::Clock clock;
     while (game.running()) {
         sf::Int64 start_time_ms = clock.getElapsedTime().asMilliseconds();
 

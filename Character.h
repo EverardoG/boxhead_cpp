@@ -15,10 +15,11 @@ class Character
         sf::RectangleShape m_render; // this is called shape in the tutorials
         sf::Vector2f pos; // position
         float max_speed = 1.f;
+        sf::Color fill_color = sf::Color::White;
 
     public:
         // Constructors and Destructors
-        Character(sf::Vector2f spawn_pos, sf::Color fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = -3.f);
+        Character(sf::Vector2f spawn_pos, sf::Color _fill_color = sf::Color::White, sf::Color outline_color = sf::Color::Black, float outline_thickness = -3.f);
         virtual ~Character();
 
         // Accessors and Mutators
@@ -40,8 +41,14 @@ class Character
 
         float angle = 0.f;
 
+        int hp = 100;
+        bool is_hit = false;
+
         bool is_attacking = false;
         bool in_collision = false;
+
+        sf::Int64 hit_loop = 300;
+        sf::Int64 time_since_last_hit = 0;
 
 };
 

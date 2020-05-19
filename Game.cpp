@@ -15,10 +15,10 @@ Game::~Game()
 // Initalizing Functions
 void Game::initWindow()
 {
-    this->videomode.height = WINDOW_HEIGHT;
     this->videomode.width = WINDOW_WIDTH;
+    this->videomode.height = WINDOW_HEIGHT;
 
-    this->window = new sf::RenderWindow(this->videomode, "BoxHead", sf::Style::Titlebar | sf::Style::Close);
+    this->window = new sf::RenderWindow(this->videomode, "BoxHead", sf::Style::Titlebar | sf::Style::Resize | sf::Style::Close);
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 }

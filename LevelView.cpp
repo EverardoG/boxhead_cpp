@@ -73,6 +73,15 @@ float LevelView::getDistBtnChars(Character* char1, Character* char2)
     return distance;
 }
 
+bool LevelView::zombieBulletCollision(Zombie* zombie, Bullet* bullet)
+{
+    // convert zombie to a rect object for the collision engine
+    Rect* zombie_rect = new Rect( new Point(zombie->getPos()) , new Point(zombie->getSize()) );
+    Line* bullet_line = new Line( new Point(bullet->start_pos), new Point(bullet->cur_pos) );
+
+    return collisionEngine->isLineRectCollision(bullet_line, zombie_rect);
+}
+
 void LevelView::update()
 {
     // check if player is attacking
@@ -130,11 +139,18 @@ void LevelView::update()
         // go through all zombies
         zombie_iter = zombie_vec.begin();
         while ( zombie_iter != zombie_vec.end() ) {
-
-            // if the zombie and bullet intersect, delete both and update the pointers
-            if ( (*zombie_iter)->getRender().getGlobalBounds().intersects( (*bullet_iter)->getRender().getGlobalBounds() ) ) {
+            // if the zombie and bullet intersect, destroy the bullet and update the zombie's hp
+            // if ( (*zombie_iter)->getRender().getGlobalBounds().intersects( (*bullet_iter)->getRender().getGlobalBounds() ) ) {
+            if (this->zombieBulletCollision(*zombie_iter, *bullet_iter)) {
                 bullet_iter = bullet_vec.erase(bullet_iter);
-                zombie_iter = zombie_vec.erase(zombie_iter);
+
+                (*zombie_iter)->hp -= 10;
+                (*zombie_iter)->is_hit = true;
+                (*zombie_iter)->time_since_last_hit = clock.getElapsedTime().asMilliseconds();
+
+                if ( (*zombie_iter)->hp <= 0 ) {
+                    zombie_iter = zombie_vec.erase(zombie_iter);
+                }
                 break; // stop checking the zombies for this bullet
             }
             else {
@@ -272,6 +288,15 @@ void LevelView::update()
         else {
             zombie->setActVel(zombie->des_vel);
         }
+
+        if (zombie->is_hit) {
+            zombie->setActVel(sf::Vector2f(0.f, 0.f));
+
+            if (clock.getElapsedTime().asMilliseconds() - zombie->time_since_last_hit > zombie->hit_loop) {
+                zombie->is_hit = false;
+            }
+        }
+
         zombie->update();
         zombie->dist_from_player = this->getDistBtnChars(this->player, zombie);
     }
