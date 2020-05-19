@@ -10,7 +10,21 @@ LevelView::~LevelView()
 {
 }
 
-// Public Functions
+// Private Functions
+
+void LevelView::initVariables()
+{
+    // this->window = nullptr;
+
+    // initialize zombies
+    zombie_vec = std::vector<Zombie*>();
+    for (int i = 0; i < NUM_ZOMBIES; i++) {
+        this->spawnZombie(i);
+    }
+
+    // reset the player
+    player = new Player(sf::Vector2f(PLAYER_SPAWN_X,PLAYER_SPAWN_Y));
+}
 void LevelView::spawnZombie(int zid)
 {
     bool new_zombie_in_collision = true;
@@ -81,6 +95,8 @@ bool LevelView::zombieBulletCollision(Zombie* zombie, Bullet* bullet)
 
     return collisionEngine->isLineRectCollision(bullet_line, zombie_rect);
 }
+
+// Public Functions
 
 void LevelView::update()
 {
@@ -347,19 +363,4 @@ void LevelView::render()
     }
 
     // this->window->display();
-}
-
-// Private Functions
-void LevelView::initVariables()
-{
-    // this->window = nullptr;
-
-    // initialize zombies
-    zombie_vec = std::vector<Zombie*>();
-    for (int i = 0; i < NUM_ZOMBIES; i++) {
-        this->spawnZombie(i);
-    }
-
-    // reset the player
-    player = new Player(sf::Vector2f(PLAYER_SPAWN_X,PLAYER_SPAWN_Y));
 }

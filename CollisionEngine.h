@@ -3,6 +3,9 @@
 
 #include "dependencies.h"
 
+/* WARNING: CollisionEngine class is NOT tested - if code is not behaving in the way its
+    expected to, it could be due to a semantic error in the CollisionEngine class */
+
 class Point
 {
     /* A point is simply a vector that represents where a point is */
