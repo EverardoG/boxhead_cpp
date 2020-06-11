@@ -16,6 +16,10 @@ void LevelView::initVariables()
 {
     // this->window = nullptr;
 
+    //initialize walls
+    wall_vec = std::vector<Wall*>();
+    wall_vec.push_back(new Wall(sf::Vector2f(200.f,200.f), sf::Vector2f(400.f, 50.f)));
+
     // initialize zombies
     zombie_vec = std::vector<Zombie*>();
     for (int i = 0; i < NUM_ZOMBIES; i++) {
@@ -23,8 +27,9 @@ void LevelView::initVariables()
     }
 
     // reset the player
-    player = new Player(sf::Vector2f(PLAYER_SPAWN_X,PLAYER_SPAWN_Y));
+    player_vec.emplace_back(new Player(sf::Vector2f(PLAYER_SPAWN_X,PLAYER_SPAWN_Y)));
 }
+
 void LevelView::spawnZombie(int zid)
 {
     bool new_zombie_in_collision = true;
@@ -96,14 +101,30 @@ bool LevelView::zombieBulletCollision(Zombie* zombie, Bullet* bullet)
     return collisionEngine->isLineRectCollision(bullet_line, zombie_rect);
 }
 
+std::vector<InGameObject*> LevelView::getAllBlockingObj()
+{
+    // return a vector of all players, zombies, and walls
+    std::vector<InGameObject*> all_blocking_objs;
+
+    for (Zombie* zombie : this->zombie_vec) {
+        all_blocking_objs.push_back(zombie);
+    }
+    for (Wall* wall : this->wall_vec) {
+        all_blocking_objs.push_back(wall);
+    }
+    for (Player* player : this->player_vec) {
+        all_blocking_objs.push_back(player);
+    }
+}
+
 // Public Functions
 
 void LevelView::update()
 {
     // check if player is attacking
-    this->player->is_attacking = false;
+    this->player_vec[0]->is_attacking = false;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && clock.getElapsedTime().asMilliseconds() - last_weapon_time > weapon_loop_time) {
-        this->player->is_attacking = true;
+        this->player_vec[0]->is_attacking = true;
         last_weapon_time = clock.getElapsedTime().asMilliseconds();
     }
 
@@ -112,26 +133,26 @@ void LevelView::update()
     float player_y_vel = 0.0f;
 
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::W) ) {
-        player_y_vel -= this->player->getSpeed();
+        player_y_vel -= this->player_vec[0]->getSpeed();
     }
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::A) ) {
-        player_x_vel -= this->player->getSpeed();
+        player_x_vel -= this->player_vec[0]->getSpeed();
     }
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) ) {
-        player_y_vel += this->player->getSpeed();
+        player_y_vel += this->player_vec[0]->getSpeed();
     }
     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::D) ) {
-        player_x_vel += this->player->getSpeed();
+        player_x_vel += this->player_vec[0]->getSpeed();
     }
 
     // normalize any diagonal movement so you can't go faster
     // by going diagonally
     if (player_x_vel != 0.0 && abs(player_x_vel) == abs(player_y_vel)) {
-        player_x_vel = player_x_vel/abs(player_x_vel) * this->player->getSpeed()/sqrt(2);
-        player_y_vel = player_y_vel/abs(player_y_vel) * this->player->getSpeed()/sqrt(2);
+        player_x_vel = player_x_vel/abs(player_x_vel) * this->player_vec[0]->getSpeed()/sqrt(2);
+        player_y_vel = player_y_vel/abs(player_y_vel) * this->player_vec[0]->getSpeed()/sqrt(2);
     }
 
-    this->player->setDesVel(sf::Vector2f(player_x_vel, player_y_vel));
+    this->player_vec[0]->setDesVel(sf::Vector2f(player_x_vel, player_y_vel));
 
     // organize zombie vector so that zombies closest to player
     // are checked first, moved first, etc
@@ -140,8 +161,9 @@ void LevelView::update()
     } );
 
     // this->pollInputs();
-    if (this->player->is_attacking) {
-        bullet_vec.push_back(new Bullet(this->player->getPos().x + this->player->getSize().x/4, this->player->getPos().y + this->player->getSize().y/2, this->player->angle));
+    if (this->player_vec[0]->is_attacking) {
+        sf::Vector2f bullet_start = sf::Vector2f(this->player_vec[0]->getPos().x + this->player_vec[0]->getSize().x/4, this->player_vec[0]->getPos().y + this->player_vec[0]->getSize().y/2);
+        bullet_vec.push_back(new Bullet(bullet_start, this->player_vec[0]->angle));
         // TODO: Make it so that the bullet object when shot diagonally is a diagonal line instead of a giant rectangle (in terms of collisions with zombies)
     }
 
@@ -181,7 +203,7 @@ void LevelView::update()
     // go through all zombies
     for (Zombie* zombie : zombie_vec) {
         // try to move the zombie towards the player
-        zombie->goTowards(this->player->getPos().x, this->player->getPos().y);
+        zombie->goTowards(this->player_vec[0]->getPos().x, this->player_vec[0]->getPos().y);
 
         bool x_collision = false;
         bool y_collision = false;
@@ -278,8 +300,6 @@ void LevelView::update()
                             // check corner collision
                             if (shape_copy.intersects( zombie2->getRender().getGlobalBounds() )) {
                                 xy_collision = true;
-                                // x_collision = true;
-                                // y_collision = true;
                             }
                         }
                         // end checking x, y, xy separately
@@ -314,7 +334,7 @@ void LevelView::update()
         }
 
         zombie->update();
-        zombie->dist_from_player = this->getDistBtnChars(this->player, zombie);
+        zombie->dist_from_player = this->getDistBtnChars(this->player_vec[0], zombie);
     }
 
     bullet_iter = bullet_vec.begin();
@@ -328,8 +348,8 @@ void LevelView::update()
         }
     }
 
-    this->player->setActVel(sf::Vector2f(this->player->des_vel.x, this->player->des_vel.y));
-    this->player->update();
+    this->player_vec[0]->setActVel(sf::Vector2f(this->player_vec[0]->des_vel.x, this->player_vec[0]->des_vel.y));
+    this->player_vec[0]->update();
 
     if (this->zombie_vec.size() == 0) {
         for (int i; i < NUM_ZOMBIES; i++) {
@@ -339,7 +359,7 @@ void LevelView::update()
 
     // check if the player was touched by a zombie
     for (Zombie* zombie : this->zombie_vec) {
-        if (zombie->getRender().getGlobalBounds().intersects( this->player->getRender().getGlobalBounds() )){
+        if (zombie->getRender().getGlobalBounds().intersects( this->player_vec[0]->getRender().getGlobalBounds() )){
             this->next_view = "Main Menu";
             break;
         }
@@ -352,7 +372,7 @@ void LevelView::render()
     this->window->clear(sf::Color(244,233,214,255));
 
     // draw game in here
-    this->window->draw(this->player->getRender());
+    this->window->draw(this->player_vec[0]->getRender());
 
     for (int i = 0; i < zombie_vec.size(); i++) {
         this->window->draw(zombie_vec[i]->getRender());
@@ -360,6 +380,10 @@ void LevelView::render()
 
     for (int i = 0; i < bullet_vec.size(); i++) {
         this->window->draw(bullet_vec[i]->getRender());
+    }
+
+    for (int i = 0; i < wall_vec.size(); i++) {
+        this->window->draw(wall_vec[i]->getRender());
     }
 
     // this->window->display();

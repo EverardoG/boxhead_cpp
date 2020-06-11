@@ -3,6 +3,8 @@
 Character::Character(sf::Vector2f spawn_pos, sf::Color _fill_color, sf::Color outline_color, float outline_thickness)
 {
     // set up the render and spawn the character
+    this->size = CHARACTER_SIZE;
+    this->pos = spawn_pos;
 
     // sets color of render
     this->fill_color = _fill_color;
@@ -12,8 +14,9 @@ Character::Character(sf::Vector2f spawn_pos, sf::Color _fill_color, sf::Color ou
 
     // sets size of render and places character
     this->m_render.setSize(this->size);
-    this->pos = spawn_pos;
     this->m_render.setPosition(this->pos);
+
+    this->collision_shape = Rect( new Point(pos), new Point(size) );
 }
 
 Character::~Character()
@@ -54,24 +57,4 @@ void Character::setDesVel(sf::Vector2f new_des_vel)
 void Character::setActVel(sf::Vector2f new_act_vel)
 {
     this->act_vel = new_act_vel;
-}
-
- sf::Vector2f Character::getPos()
- {
-    return this->pos;
- }
-
-sf::Vector2f Character::getSize()
-{
-    return this->size;
-}
-
-sf::RectangleShape Character::getRender()
-{
-    return this->m_render;
-}
-
-float Character::getSpeed()
-{
-    return this->max_speed;
 }

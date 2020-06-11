@@ -6,7 +6,12 @@
 /* WARNING: CollisionEngine class is NOT tested - if code is not behaving in the way its
     expected to, it could be due to a semantic error in the CollisionEngine class */
 
-class Point
+class CollisionShape
+{
+
+};
+
+class Point : public CollisionShape
 {
     /* A point is simply a vector that represents where a point is */
     public:
@@ -33,7 +38,7 @@ class Point
         float y;
 };
 
-class Line
+class Line : public CollisionShape
 {
     /* A line is just two points connected to each other */
     public:
@@ -46,7 +51,7 @@ class Line
         }
 };
 
-class Rect
+class Rect : public CollisionShape
 {
     /* A rectangle is defined by two points that allow you to get the rest of the rectangle */
     /* basically the same as a line, but we are going to treat it differently */

@@ -18,6 +18,8 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_WIDTH  800
 
+#define TILE_SIZE sf::Vector2f(50.0f, 50.f)
+
 #define PLAYER_SPEED 3.0f
 #define ZOMBIE_SPEED 1.0f
 #define NUM_ZOMBIES 50

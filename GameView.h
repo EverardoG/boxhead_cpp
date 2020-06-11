@@ -2,9 +2,6 @@
 #define GAMEVIEW_H
 
 #include "dependencies.h"
-#include "Player.h"
-#include "Zombie.h"
-#include "Bullet.h"
 
 // need forward declaration of game so we can use it in GameView
 class GameView
