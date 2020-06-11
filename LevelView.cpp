@@ -103,7 +103,7 @@ bool LevelView::zombieBulletCollision(Zombie* zombie, Bullet* bullet)
 
 std::vector<InGameObject*> LevelView::getAllBlockingObj()
 {
-    // return a vector of all players, zombies, and walls
+    // return a vector of all zombies, and walls
     std::vector<InGameObject*> all_blocking_objs;
 
     for (Zombie* zombie : this->zombie_vec) {
@@ -112,9 +112,11 @@ std::vector<InGameObject*> LevelView::getAllBlockingObj()
     for (Wall* wall : this->wall_vec) {
         all_blocking_objs.push_back(wall);
     }
-    for (Player* player : this->player_vec) {
-        all_blocking_objs.push_back(player);
-    }
+
+    return all_blocking_objs;
+    // for (Player* player : this->player_vec) {
+    //     all_blocking_objs.push_back(player);
+    // }
 }
 
 // Public Functions
@@ -164,7 +166,6 @@ void LevelView::update()
     if (this->player_vec[0]->is_attacking) {
         sf::Vector2f bullet_start = sf::Vector2f(this->player_vec[0]->getPos().x + this->player_vec[0]->getSize().x/4, this->player_vec[0]->getPos().y + this->player_vec[0]->getSize().y/2);
         bullet_vec.push_back(new Bullet(bullet_start, this->player_vec[0]->angle));
-        // TODO: Make it so that the bullet object when shot diagonally is a diagonal line instead of a giant rectangle (in terms of collisions with zombies)
     }
 
     // iterate through bullets and check if any zombies were hit, delete them if so
@@ -216,10 +217,11 @@ void LevelView::update()
             y_collision = false;
             xy_collision = false;
 
-            // collision check this copy with other zombies, negate any x/y part of movement that would cause a collision
-            for (Zombie* zombie2 : zombie_vec) {
-                // check that zombie2 is not itself
-                if (zombie != zombie2) {
+            // collision check this copy with other zombies and walls, negate any x/y part of movement that would cause a collision
+            std::vector<InGameObject*> all_blocking_obj = this->getAllBlockingObj();
+            for (InGameObject* blocking_obj : all_blocking_obj) {
+                // check that blocking_obj not itself
+                if (zombie != blocking_obj) {
                     // check if there would be a collision in x,y, or xy with zombie2
 
                     // make a copy of the zombie's collision shape
@@ -247,7 +249,7 @@ void LevelView::update()
                     // end shape placement
 
                     // check for a collision in all directions (x, y, xy)
-                    if (shape_copy.intersects(zombie2->getRender().getGlobalBounds()) )  {
+                    if (shape_copy.intersects(blocking_obj->getRender().getGlobalBounds()) )  {
                         // determine if the collision is x, y, and/or xy
 
                         // reset the shape size as we check each direction
@@ -259,7 +261,7 @@ void LevelView::update()
                         // check x
                         if (zombie->des_vel.x != 0) {
                             shape_copy.left += zombie->des_vel.x;
-                            if (shape_copy.intersects(zombie2->getRender().getGlobalBounds())) {
+                            if (shape_copy.intersects(blocking_obj->getRender().getGlobalBounds())) {
                                 x_collision = true;
                             }
                             shape_copy.left -= zombie->des_vel.x;
@@ -268,7 +270,7 @@ void LevelView::update()
                         // check y
                         if (zombie->des_vel.y != 0) {
                             shape_copy.top += zombie->des_vel.y;
-                            if (shape_copy.intersects(zombie2->getRender().getGlobalBounds())) {
+                            if (shape_copy.intersects(blocking_obj->getRender().getGlobalBounds())) {
                                 y_collision = true;
                             }
                             shape_copy.top -= zombie->des_vel.y;
@@ -298,7 +300,7 @@ void LevelView::update()
                             // end placemnt of corner box
 
                             // check corner collision
-                            if (shape_copy.intersects( zombie2->getRender().getGlobalBounds() )) {
+                            if (shape_copy.intersects( blocking_obj->getRender().getGlobalBounds() )) {
                                 xy_collision = true;
                             }
                         }
